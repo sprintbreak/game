@@ -11,6 +11,7 @@ import { initializePlayer } from './../../../store/actions/playerActions';
 import { wsDispatch } from './../../../store/actions/wsActions';
 import { useHistory } from 'react-router-dom';
 import Websocket from 'react-websocket';
+import { Alert } from '@material-ui/lab'
 
 const Home = props => {
 
@@ -63,6 +64,7 @@ const Home = props => {
                 <BtnHome>
                     <Button className="main_btn" variant="outlined" onClick={handleJoinRoom}>Entrar al juego</Button>
                 </BtnHome>
+                { props.error && <Alert severity="error">{props.error}</Alert> }
             </PageHome>
         </PageContainer>
     )
@@ -70,6 +72,7 @@ const Home = props => {
 
 const mapStateToProps = state => {
     return {
+        error: state.appReducer.error,
         id: state.appReducer.user_id,
         inRoom: state.appReducer.inRoom,
         session: state.appReducer.session,

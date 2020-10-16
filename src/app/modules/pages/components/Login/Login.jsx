@@ -9,12 +9,16 @@ import { TextField } from '@material-ui/core';
 import { login, logout, register, setSessionState } from './../../../store/actions/loginActions';
 import GitHubLogin from 'react-github-login';
 import Button from './../../../components/Button/Button';
+import { Alert } from '@material-ui/lab';
 import logo from './../../../../../assets/img/logo.png';
 import config from '../../../../config/config';
+// import { useForm } from 'react-hook-form'
 
 const Login = props => {
 
-  const { id, loginAction, registerLogin, setSessionState, logged } = props;
+  const { error, id, loginAction, registerLogin, setSessionState, logged } = props;
+  // const { register, handleSubmit, watch, errors } = useForm();
+  // const formRef = React.useRef(null);
 
   const history = useHistory();
   const [loginLocal, setLoginLocal] = useState(false);
@@ -22,6 +26,11 @@ const Login = props => {
   const [user, setUser] = useState('');
   const [pass, setPass] = useState('');
   const [email, setEmail] = useState('');
+  const [inputErrors, setInputErrors] = useState({
+    user: false,
+    pass: false,
+    email: false
+  });
   // loginRegister reemplaza el 'register' del ejemplo
   const [loginRegister, setLoginRegister] = useState(false);
 
@@ -32,28 +41,60 @@ const Login = props => {
     }
   }, [logged]);
 
+  const validateInputs = () => {
+    if(user === "" && pass === "") {
+      setInputErrors({ ...inputErrors, user: true, pass: true })
+      return false;
+    }
+    if(user === "" || pass === "") {
+      if(user === '') {
+        setInputErrors({ ...inputErrors, user: true })
+        return false;
+      }
+      if(pass === '') {
+        setInputErrors({ ...inputErrors, pass: true })
+        return false;
+      }
+    } else {
+      return true;
+    }
+  }
+
+  const validateEmail = () => {
+    if(email === "") {
+      setInputErrors({ ...inputErrors, email: true })
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   const handleLoginWithUser = () => {
-    setSessionState({
-      origin: 'santander',
-      nickname: user
-    })
-    loginAction(id, {
-      origin: 'santander',
-      data: { 
-        username: user, 
-        password: pass 
-      } 
-    })
+    if(validateInputs()) {
+      setSessionState({
+        origin: 'santander',
+        nickname: user
+      })
+      loginAction(id, {
+        origin: 'santander',
+        data: { 
+          username: user, 
+          password: pass 
+        } 
+      })
+    }
   }
 
   const handleRegisterClick = () => {
-    setLoginRegister(false);
-    registerLogin(id, { data: {
-      username: user,
-      password: pass,
-      email,
-      fullname: ''
-    }})
+    if(validateInputs() && validateEmail()) {
+      setLoginRegister(false);
+      registerLogin(id, { data: {
+        username: user,
+        password: pass,
+        email,
+        fullname: ''
+      }})
+    }
   }
 
   const handleGoogleLoginSuccess = response => {
@@ -126,6 +167,8 @@ const Login = props => {
                   label="Nombre de usuario"
                   name="username"
                   autoComplete="username"
+                  error={inputErrors.user}
+                  helperText={inputErrors.user ? 'Este campo es requerido' : null}
                 />
                 <TextField
                   onChange={e => setPass(e.target.value)}
@@ -133,6 +176,8 @@ const Login = props => {
                   label="Password"
                   type="password"
                   id="password"
+                  error={inputErrors.pass}
+                  helperText={inputErrors.pass ? 'Este campo es requerido' : null}
                 />
                 { loginRegister ? (<TextField
                   onChange={e => setEmail(e.target.value)}
@@ -140,12 +185,15 @@ const Login = props => {
                   label="Email"
                   type="email"
                   id="email"
+                  error={inputErrors.email}
+                  helperText={inputErrors.email ? 'Este campo es requerido' : null}
                 />) : null }
                 { !loginRegister && <Button className="button" onClick={handleLoginWithUser}>Entrar</Button> }
                 { !loginRegister && <Button className="button" onClick={() => setLoginRegister(true)}>Soy nuevo</Button> }
                 { loginRegister && <Button className="button" onClick={handleRegisterClick}>Registrarme</Button> }
                 { loginRegister && <Button className="button" onClick={() => setLoginRegister(false)}>Cancelar</Button> }
                 </div>
+                { error && <Alert severity="error">{error}</Alert> }
             </div>) : null }
         </div>
       </Container>
@@ -154,6 +202,7 @@ const Login = props => {
 
 const mapStateToProps = state => {
   return {
+    error: state.appReducer.error,
     id: state.appReducer.user_id,
     logged: state.appReducer.logged
   }

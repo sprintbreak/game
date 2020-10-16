@@ -34,12 +34,12 @@ const Room = props => {
     const [timer, setTimer] = useState(true);
     
     React.useEffect(() => {
-        if(props.inRound) console.log(props);
+        resetState();
     }, [props.inRound])
 
-    React.useEffect(() => {
-        resetState();
-    }, [props.redCard])
+    // React.useEffect(() => {
+    //     resetState();
+    // }, [props.redCard])
 
     React.useEffect(() => {
         if(props.winner) {

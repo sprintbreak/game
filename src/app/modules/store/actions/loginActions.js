@@ -36,12 +36,17 @@ export function register(id, { data }) {
             },
             body: JSON.stringify(postData)
         })
-        .then(response => response.json())
+        .then(response => {
+            if(!response.ok) {
+                throw 'Ocurrió un error, intente nuevamente';
+            }
+            return response.json()
+        })
         .then(json => {
             dispatch({ type: 'REGISTER_SUCCESS', payload: { id }})
         })
         .catch(error => {
-            dispatch({ type: 'REGISTER_ERROR', payload: { id, error }})
+            dispatch({ type: 'ERROR', payload: { id, error }})
         })
     }
 }
@@ -50,110 +55,134 @@ export function login(id, { origin, data }) {
     if(origin === 'santander') {
         return function(dispatch) {
             dispatch({ type: 'LOADING_ON' });
-            return new Promise((resolve, reject) => {
-                fetch(`${config.api.url}/challenge?username=${data.username}`, {
-                    method: 'get',
-                    mode: 'cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Session-Type': origin
-                    }
-                })
-                .then(response => response.json())
-                .then(challenge => {
-                    
-                    const sha256_password = crypto.createHash('sha256').update(data.password).digest('base64')
-                    const hmac = crypto.createHmac('sha256', sha256_password)
-                    
-                    hmac.update(challenge.challenge)
-                    
-                    const challengeLogin = {
-                        "challenge_response": hmac.digest('base64'),
-                        "username": data.username
-                    }
-                    
-                    fetch(`${config.api.url}/login`, {
-                        method: 'post', 
+            try {                    
+                return new Promise((resolve, reject) => {
+                    fetch(`${config.api.url}/challenge?username=${data.username}`, {
+                        method: 'get',
                         mode: 'cors',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-Session-Type': origin
-                        },
-                        body: JSON.stringify(challengeLogin)
+                        }
                     })
-                    .then(response => response.json())
-                    .then(json => {
-                        console.log("Received:", json)
-
-                        dispatch({
-                            type: 'LOGIN_SUCCESS',
-                            payload: {
-                                id,
-                                response: json,
-                                status: "Logged",
-                                logged: true,
-                                session: {
-                                    origin
-                                }
-                            }
+                    .then(response => {
+                        if(!response.ok) {
+                            throw 'Ocurrió un error, intente nuevamente';
+                        }
+                        return response.json()
+                    })
+                    .then(challenge => {
+                        
+                        const sha256_password = crypto.createHash('sha256').update(data.password).digest('base64')
+                        const hmac = crypto.createHmac('sha256', sha256_password)
+                        
+                        hmac.update(challenge.challenge)
+                        
+                        const challengeLogin = {
+                            "challenge_response": hmac.digest('base64'),
+                            "username": data.username
+                        }
+                        
+                        fetch(`${config.api.url}/login`, {
+                            method: 'post', 
+                            mode: 'cors',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Session-Type': origin
+                            },
+                            body: JSON.stringify(challengeLogin)
                         })
+                        .then(response => {
+                            if(!response.ok) {
+                                throw 'Ocurrió un error, intente nuevamente';
+                            }
+                            return response.json()
+                        })
+                        .then(json => {
+                            console.log("Received:", json)
 
-                        localStorage.setItem('logged', true);
+                            dispatch({
+                                type: 'LOGIN_SUCCESS',
+                                payload: {
+                                    id,
+                                    response: json,
+                                    status: "Logged",
+                                    logged: true,
+                                    session: {
+                                        origin
+                                    }
+                                }
+                            })
 
-                        dispatch({ type: 'LOADING_OFF' });
+                            localStorage.setItem('logged', true);
 
+                            dispatch({ type: 'LOADING_OFF' });
+
+                        })
+                        .catch(error => {
+                            dispatch({ type: 'LOGIN_ERROR', payload: { id, error: "Ocurrió un error, intente nuevamente" }})
+                            dispatch({ type: 'LOADING_OFF' });
+                        })
                     })
                     .catch(error => {
-                        console.error(error);
-                        dispatch({ type: 'LOGIN_ERROR', payload: { id, error }})
+                        dispatch({ type: 'LOGIN_ERROR', payload: { id, error: "Ocurrió un error, intente nuevamente" }})
                         dispatch({ type: 'LOADING_OFF' });
                     })
                 })
-                .catch(error => {
-                    console.error(error);
-                    dispatch({ type: 'LOGIN_ERROR', payload: { id, error }})
-                    dispatch({ type: 'LOADING_OFF' });
-                })
-            })
+            } catch (error) {
+                dispatch({ type: 'LOGIN_ERROR', payload: { id, error: "Ocurrió un error, intente nuevamente" }})
+                dispatch({ type: 'LOADING_OFF' });
+            }
+            
         }
     }
 
     return function(dispatch) {
         console.log('Login google')
         dispatch({ type: 'LOADING_ON' });
-        return fetch(`${config.api.url}/login`, {
-            method: 'post', 
-            mode: 'cors', 
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Session-Type': origin
-            }, 
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(json => {
-            console.log("Received:", json)
-
-            dispatch({
-                type: 'LOGIN_SUCCESS',
-                payload: {
-                    id,
-                    response: json,
-                    status: "Logged",
-                    logged: true,
-                    session: {
-                        origin
-                    }
+        try {
+            return fetch(`${config.api.url}/login`, {
+                method: 'post', 
+                mode: 'cors', 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Session-Type': origin
+                }, 
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if(!response.ok) {
+                    throw 'Ocurrió un error, intente nuevamente';
                 }
-            });
-
-            localStorage.setItem('logged', true);
-
+                return response.json()
+            })
+            .then(json => {
+                console.log("Received:", json)
+    
+                dispatch({
+                    type: 'LOGIN_SUCCESS',
+                    payload: {
+                        id,
+                        response: json,
+                        status: "Logged",
+                        logged: true,
+                        session: {
+                            origin
+                        }
+                    }
+                });
+    
+                localStorage.setItem('logged', true);
+    
+                dispatch({ type: 'LOADING_OFF' });
+            }).catch((error) => {
+                dispatch({ type: 'LOGIN_ERROR', payload: { id, error: "Ocurrió un error, intente nuevamente" } });
+                dispatch({ type: 'LOADING_OFF' });
+            })
+        } catch (error) {
+            dispatch({ type: 'LOGIN_ERROR', payload: { id, error: "Ocurrió un error, intente nuevamente" } });
             dispatch({ type: 'LOADING_OFF' });
-        }).catch((error) => {
-            dispatch({ type: 'LOGIN_ERROR', payload: { id, error } });
-            dispatch({ type: 'LOADING_OFF' });
-        })
+        }
     }
 }
 
@@ -171,7 +200,12 @@ export function logout(id, session) {
             },
             body: JSON.stringify({ id: session.user_id })
         })
-        .then(response => response.json())
+        .then(response => {
+            if(!response.ok) {
+                throw 'Ocurrió un error, intente nuevamente';
+            }
+            return response.json()
+        })
         .then(json => {
 
             localStorage.setItem('logged', false);
@@ -184,6 +218,7 @@ export function logout(id, session) {
             localStorage.setItem('logged', false);
 
             dispatch({ type: 'LOGOUT', payload: { id } })
+            dispatch({ type: 'ERROR', payload: { error } })
             dispatch({ type: 'LOADING_OFF' });
         })
     }

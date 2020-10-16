@@ -38,12 +38,17 @@ export function submitCard(id, session, room_id, card_id) {
             },
             body: JSON.stringify({ id: session.user_id, room_id, card_id })
         })
-        .then(response => response.json())
+        .then(response => {
+            if(!response.ok) {
+                throw 'Ocurrió un error, intente nuevamente';
+            }
+            return response.json()
+        })
         .then(json => {
             dispatch({ type: 'SUBMIT_CARD', payload: { response: json, id, status: '' } })
         })
         .catch(error => {
-            dispatch({ type: 'SUBMIT_CARD_ERROR', payload: { id, error }})
+            dispatch({ type: 'ERROR', payload: { id, error }})
         })
     }
 }
@@ -62,12 +67,17 @@ export function submitWinner(id, session, room_id, card_id) {
             },
             body: JSON.stringify({ id: session.user_id, room_id, card_id })
         })
-        .then(response => response.json())
+        .then(response => {
+            if(!response.ok) {
+                throw 'Ocurrió un error, intente nuevamente';
+            }
+            return response.json()
+        })
         .then(json => {
             dispatch({ type: 'SUBMIT_WINNER', payload: { response: json, id, status: '' } })
         })
         .catch(error => {
-            dispatch({ type: 'SUBMIT_WINNER_ERROR', payload: { id, error } })
+            dispatch({ type: 'ERROR', payload: { id, error } })
         })
     }
 }

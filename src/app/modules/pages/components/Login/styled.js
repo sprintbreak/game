@@ -50,16 +50,21 @@ export const Container = styled.div`
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                margin-bottom: 1.5rem;
 
                 .MuiFormControl-root.MuiTextField-root {
                     width: 100%;
                     margin: 0.5rem;
                 }
 
+                .MuiFormHelperText-root {
+                    color: #e72727;
+                    font-weight: 600;
+                }
+
                 div.button {
                     margin-top: 1rem;
                 }
-
             }
         }
 

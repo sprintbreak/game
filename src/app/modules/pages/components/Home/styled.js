@@ -23,6 +23,8 @@ export const ImgHome = styled.div`
 
 export const BtnHome = styled.div`
 
+    margin-bottom: 1rem;
+
     /* .main_btn {
         position: relative;
         display: inline-block;

@@ -73,6 +73,7 @@ export function appReducer(state = INITIAL_STATE, action) {
         case 'INITIALIZE_PLAYER': {
             return {
                 ...state,
+                error: '',
                 id: action.payload.id,
                 redCard: {
                     content: '' 
@@ -105,6 +106,7 @@ export function appReducer(state = INITIAL_STATE, action) {
         case 'LOGIN_SUCCESS': {
             return {
                 ...state,
+                error: '',
                 statusLogin: action.payload.status,
                 logged: action.payload.logged,
                 user_id: action.payload.response.id,
@@ -116,9 +118,20 @@ export function appReducer(state = INITIAL_STATE, action) {
                 }
             }
         }
+        case 'LOGIN_ERROR': {
+            return {
+                ...state,
+                statusLogin: 'Login error',
+                logged: false,
+                user_id: action.payload.id,
+                error: action.payload.error,
+                session: {},
+            }
+        }
         case 'LOGOUT': {
             return {
                 ...state,
+                error: '',
                 statusLogin: 'Logged out',
                 logged: false,
                 user_id: '',
@@ -130,6 +143,7 @@ export function appReducer(state = INITIAL_STATE, action) {
         case 'NEW_MESSAGE': {
             return {
                 ...state,
+                error: '',
                 messages: [
                     ...state.messages,
                     { ...action.payload.data }
@@ -139,14 +153,22 @@ export function appReducer(state = INITIAL_STATE, action) {
         case 'ROOM_JOINED': {
             return {
                 ...state,
+                error: '',
                 room: action.payload.response.room_id,
                 statusRoom: action.payload.status,
                 inRoom: true,
             }
         }
+        case 'ROOM_NOT_JOINED': {
+            return {
+                ...state,
+                error: action.payload.error,
+            }
+        }
         case 'ROOM_CLOSED': {
             return {
                 ...state,
+                error: '',
                 room: '',
                 statusRoom: 'Closed',
                 inRoom: false,
@@ -160,16 +182,17 @@ export function appReducer(state = INITIAL_STATE, action) {
         }
         case 'ROOM_LEAVED': {
             return {
+                error: '',
                 room: '',
                 statusRoom: 'Leaved',
                 inRoom: false,
+                inRound: false,
                 accumulatedPoints: 0,
                 selectedCard: 0,
                 winner: null,
                 roundLimit: "",
                 chooseCardLimit: "",
                 chooseWinnerLimit: "",
-                inRound: false,
             }
         }
         case 'ROUND_NEW': {
@@ -184,6 +207,7 @@ export function appReducer(state = INITIAL_STATE, action) {
                     playerType: 'Hand',
                     status: "Playing",
                     selectedCard: 0,
+                    selectedCards: [],
                     submitted: false,
                     winner: null,
                     roundLimit: data.round_limit,
@@ -201,6 +225,7 @@ export function appReducer(state = INITIAL_STATE, action) {
                     playerType: 'Player',
                     status: "Playing",
                     selectedCard: 0,
+                    selectedCards: [],
                     submitted: false,
                     winner: null,
                     roundLimit: data.round_limit,
@@ -296,7 +321,7 @@ export function appReducer(state = INITIAL_STATE, action) {
         case 'UPDATE_STATS': {
             return {
                 ...state,
-                points: action.payload.points,
+                points: action.payload.data.points,
                 superpoints: action.payload.data.superpoints
             }
         }

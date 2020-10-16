@@ -31,7 +31,12 @@ export function joinRoom(id, session, ws) {
             },
             body: JSON.stringify({ id:session.user_id })
         })
-        .then(response => response.json())
+        .then(response => {
+            if(!response.ok) {
+                throw 'No se han encontrado jugadores, intente nuevamente';
+            }
+            return response.json()
+        })
         .then(json => {
             dispatch({ type: 'ROOM_JOINED', payload: { response: json, id, status: 'Joined' } });
             dispatch({ type: 'LOADING_OFF' });
@@ -55,7 +60,12 @@ export function leaveRoom(id, session) {
                 'x-token': session.token
             }, body: JSON.stringify({ id: session.user_id })
         })
-        .then(response => response.json())
+        .then(response => {
+            if(!response.ok) {
+                throw 'Ocurrió un error, intente nuevamente';
+            }
+            return response.json()
+        })
         .then(json => {
             dispatch({ type: 'ROOM_LEAVED', payload: { response: json, id, status: 'Leaved' } })
         })
@@ -74,7 +84,12 @@ export function status() {
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            if(!response.ok) {
+                throw 'Ocurrió un error, intente nuevamente';
+            }
+            return response.json()
+        })
         .then(status => {
             dispatch({
                 type: 'STATUS',

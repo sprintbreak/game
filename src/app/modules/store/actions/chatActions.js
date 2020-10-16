@@ -16,7 +16,12 @@ export function sendMessage(id, session, message) {
                 'x-token': session.token
             }, body: JSON.stringify({ id: session.user_id, message })
         })
-        .then(response => response.json())
+        .then(response => {
+            if(!response.ok) {
+                throw 'Ocurrió un error, intente nuevamente';
+            }
+            return response.json()
+        })
         .then(json => {
             dispatch({ type: 'SEND_MESSAGE', payload: {id, response: json, message, username: session.username}})
         })

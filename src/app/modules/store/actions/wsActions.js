@@ -45,6 +45,7 @@ export function wsDispatch(id, message, { props, ws }) {
         return roomClosed(id, json)
     }
     if (json.type === 'UPDATE_STATS') {
+        console.log('update stats')
         return updateStats(id, json)
     }
     if (json.type === 'UPDATE_PROFILE') {
