@@ -1,6 +1,6 @@
 {
     "name": "generic-frontend",
-    "homepage": "https://sprintbreak2.github.io/game",
+    "homepage": "https://sprintbreak.github.io/game",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
