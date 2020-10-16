@@ -6,12 +6,12 @@ export const StyledScore = styled.div`
 
     p {
         color: #262533;
-        font-size: 40px;
+        font-size: 35px;
         font-weight: 700;
         text-transform: uppercase;
     }
 
     .score-value {
-        margin-left: 1rem;
+        margin-left: 0.5rem;
     }
 `;

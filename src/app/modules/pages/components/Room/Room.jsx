@@ -20,37 +20,58 @@ const dateHelper = new DateHelper();
 const randomHelper = new RandomHelper();
 
 const Room = props => {
+
+    const ws = React.createRef();
+    const chat = React.createRef();
+
+    const [inSelected, setInSelected] = useState(false);
+    const [selectedCardLocal, setSelectedCardLocal] = useState({
+        id: '',
+        content: '',
+    });
+
+    const [win, setWin] = useState(false);
+    const [timer, setTimer] = useState(true);
     
     React.useEffect(() => {
         if(props.inRound) console.log(props);
     }, [props.inRound])
 
     React.useEffect(() => {
-        console.log(props.winner);
+        resetState();
+    }, [props.redCard])
+
+    React.useEffect(() => {
+        if(props.winner) {
+            if(props.winner.player === props.id) setWin(true);
+        }
     }, [props.winner])
 
-    const ws = React.createRef();
-    const chat = React.createRef();
-
-    const [inSelected, setInSelected] = useState(false);
-    const [selectedCardId, setSelectedCardId] = useState(0);
-    const [win, setWin] = useState(false);
-    const [timer, setTimer] = useState(true);
+    const resetState = () => {
+        setInSelected(false);
+        setSelectedCardLocal({
+            id: '',
+            content: '',
+        })
+        setWin(false);
+        setTimer(true);
+    }    
 
     const secondsLeft = dateHelper.calculateSecondsLeftTo(props.roundLimit, props.chooseCardLimit, props.chooseWinnerLimit)
 
-    const handleSelectCard = selectedCard => {
+    const handleSelectCard = card => {
         const { submitCard, id, session, room } = props;
-        console.log('Carta seleccionada: ', selectedCard);
+        console.log('Carta seleccionada: ', card);
         setInSelected(true);
-        submitCard(id, session, room, selectedCard);
+        setSelectedCardLocal(card);
+        submitCard(id, session, room, card.id);
     }
 
-    const handleSelectWinner = selectedCard => {
+    const handleSelectWinner = card => {
         const { id, session, room, submitWinner } = props;
-        console.log('Carta ganadora: ', selectedCard);
+        console.log('Carta ganadora: ', card);
         setInSelected(true);
-        submitWinner(id, session, room, selectedCard);
+        submitWinner(id, session, room, card.id);
     }
 
     // const handleSelectRandomCard = () => {
@@ -99,7 +120,7 @@ const Room = props => {
             <Container>
                 
                 { !props.inRound && (
-                    <h4>Esperando a los demás jugadores...</h4>
+                    <h4>El juego está por comenzar!</h4>
                 ) }
 
                 { props.inRound && (<div className="play-container">                
@@ -118,7 +139,7 @@ const Room = props => {
                                 color="roja"
                                 text={props.redCard.content}
                                 />
-                                <p className="mensaje">Pregunta de la casa</p>
+                                { props.playerType === "Player" && <p className="mensaje">Pregunta de la casa</p> }
                             </div>
                         ) }
 
@@ -154,26 +175,26 @@ const Room = props => {
 
                             <div className="played-card">
                                 <Card
-                                key={props.whiteCards[selectedCardId].id} 
-                                id={props.whiteCards[selectedCardId].id}
+                                key={selectedCardLocal.id}
+                                id={selectedCardLocal.id}
                                 color="blanca"
-                                text={props.whiteCards[selectedCardId].content}
+                                text={selectedCardLocal.content}
                                 />
                                 <p className="mensaje">Vos elegiste</p>
                             </div>
 
                             <div className="played-card">
 
-                                { props.selectedWinnerCard ? (<Card 
-                                key={props.selectedWinnerCard.id} 
-                                id={props.selectedWinnerCard.id}
+                                { props.winner ? (<Card 
+                                key={props.winner.card.id} 
+                                id={props.winner.card.id}
                                 color="blanca"
-                                text={props.selectedWinnerCard.content}
+                                text={props.winner.card.content}
                                 selected={true}
                                 win={win}
                                 />) : <Card /> }
 
-                                { props.selectedWinnerCard ? 
+                                { props.winner ? 
                                 (<p className="mensaje">La casa eligió</p>) : 
                                 (<p className="mensaje">La casa elige</p>) }
 
@@ -185,10 +206,10 @@ const Room = props => {
                     <ActionsWrapper>
                         { props.playerType === 'Player' && <Timer time={secondsLeft.seconds_to_card_limit} onComplete={()=>{}} /> }
                         { props.playerType === 'Hand' && <Timer time={secondsLeft.seconds_to_winner_limit} onComplete={()=>{}} /> }
-                        <Score score={props.points} />
+                        <Score score={props.accumulatedPoints} />
                     </ActionsWrapper>
                 </div>)}
-                <Chat sendMessage={handleMessageClick} username={props.id} messages={props.messages} ref={chat} />
+                {/* <Chat sendMessage={handleMessageClick} username={props.nickname} messages={props.messages} ref={chat} /> */}
             </Container>
         </PageContainer>
     )

@@ -13,7 +13,7 @@ export const PageHome = styled.div`
 `;
 
 export const ImgHome = styled.div`
-    margin: 5rem;
+    margin: 2rem;
 
     img {
         border-bottom: 1px solid #e72727;

@@ -22,7 +22,6 @@ const Login = props => {
   const [user, setUser] = useState('');
   const [pass, setPass] = useState('');
   const [email, setEmail] = useState('');
-  const [fullname, setFullname] = useState('');
   // loginRegister reemplaza el 'register' del ejemplo
   const [loginRegister, setLoginRegister] = useState(false);
 
@@ -53,7 +52,7 @@ const Login = props => {
       username: user,
       password: pass,
       email,
-      fullname
+      fullname: ''
     }})
   }
 
@@ -141,13 +140,6 @@ const Login = props => {
                   label="Email"
                   type="email"
                   id="email"
-                />) : null }
-                { loginRegister ? (<TextField
-                  onChange={e => setFullname(e.target.value)}
-                  name="fullname"
-                  label="Nombre completo"
-                  type="fullname"
-                  id="fullname"
                 />) : null }
                 { !loginRegister && <Button className="button" onClick={handleLoginWithUser}>Entrar</Button> }
                 { !loginRegister && <Button className="button" onClick={() => setLoginRegister(true)}>Soy nuevo</Button> }

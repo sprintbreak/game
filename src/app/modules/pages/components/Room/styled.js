@@ -16,9 +16,10 @@ export const Container = styled.div`
         color: #262533;
         text-align: center;
         text-transform: uppercase;
-        font-size: 20px;
+        font-size: 30px;
         font-weight: 700;
         letter-spacing: 1px;
+        margin-top: 2rem;
     }
 
     .play-container {
@@ -26,7 +27,6 @@ export const Container = styled.div`
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        margin-top: 1.5rem;
     }
 `;
 
@@ -49,7 +49,7 @@ export const CardsWrapper = styled.div`
             color: #262533;
             text-align: center;
             text-transform: uppercase;
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 700;
             letter-spacing: 1px;
         }

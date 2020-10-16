@@ -11,7 +11,7 @@ export const TimeWrapper = styled.div`
     height: 30px;
 
     & div.time {
-        font-size: 40px;
+        font-size: 30px;
         font-family: 'Barlow Semi Condensed';
         font-weight: 700;
         position: absolute;

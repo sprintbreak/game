@@ -59,8 +59,8 @@ const Timer = ({ time, onComplete }) => {
             duration={time}
             initialRemainingTime={time}
             colors="#EC0000"
-            size={100}
-            strokeWidth={5}>
+            size={80}
+            strokeWidth={3}>
                 <Counter onComplete={onComplete} />
             </CountdownCircleTimer>
         </TimerWrapper>

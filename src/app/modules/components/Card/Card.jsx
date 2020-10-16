@@ -18,7 +18,10 @@ const Card = ({ win = false, color = "default", selected = false, text = "", id 
     
     const handleClick = () => {
         checked ? setChecked(false) : setChecked(true);
-        onClick(id);
+        onClick({
+            id,
+            content: text,
+        });
     }
     
     const ref = useRef();
