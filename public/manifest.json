@@ -1,9 +1,10 @@
 {
-  "main.css": "./css/main.57f52e4bfb6c068614ac.css",
-  "main.js": "./main.57f52e4bfb6c068614ac.bundle.js",
+  "main.css": "./css/main.c7346b2ab986c2c8c370.css",
+  "main.js": "./main.c7346b2ab986c2c8c370.bundle.js",
   "favicon.png": "./favicon.png",
   "fonts/font-awesome.min.css": "./fonts/fontawesome-webfont.woff2",
   "images/access-denied.svg": "./images/access-denied.svg",
+  "images/dorso-card.svg": "./images/dorso-card.svg",
   "images/elsa-white.svg": "./images/elsa-white.svg",
   "images/elsa.svg": "./images/elsa.svg",
   "images/font-awesome.min.css": "./images/fontawesome-webfont.svg",
