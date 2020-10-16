@@ -7,7 +7,7 @@ import { logout } from './../../../modules/store/actions/loginActions';
 import { leaveRoom, status } from './../../../modules/store/actions/roomActions';
 import { useHistory } from 'react-router-dom';
 
-const Header = ({ id, logged, inRoom, nickname, session, status, rooms, playingPlayers, waitingPlayers }) => {
+const Header = ({ id, logged, inRoom, logout, leaveRoom, nickname, session, status, rooms, playingPlayers, waitingPlayers }) => {
 
     React.useEffect(() => {
         status();
@@ -21,9 +21,8 @@ const Header = ({ id, logged, inRoom, nickname, session, status, rooms, playingP
     }
     
     const handleLeaveRoomClick = () => {
-        // leaveRoom(id, session)
-        // .then(() => history.push("/"));
-        history.push("/")
+        leaveRoom(id, session)
+        .then(() => history.push("/home"));
     }
 
     return (
@@ -41,13 +40,12 @@ const Header = ({ id, logged, inRoom, nickname, session, status, rooms, playingP
                             </a>
 
                             <div className="nickname">
-                                <p>Usuario: {id}</p>
+                                <p>Usuario: {nickname}</p>
                             </div>
 
                             <div className="btn-salir">
-                                <Button onClick={handleLeaveRoomClick}>Abandonar</Button>
-                                {/* { inRoom && <Button onClick={handleLeaveRoomClick}>Abandonar</Button> } */}
-                                {/* <Button onClick={handleSignOutClick}>Logout</Button> */}
+                                { inRoom && <Button onClick={handleLeaveRoomClick}>Abandonar</Button> }
+                                { !inRoom && <Button onClick={handleSignOutClick}>Logout</Button> }
                             </div>
 
                         </div>

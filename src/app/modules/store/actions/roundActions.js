@@ -49,6 +49,7 @@ export function submitCard(id, session, room_id, card_id) {
 }
 
 export function submitWinner(id, session, room_id, card_id) {
+    console.log("Post /choose-winner:", { id:session.user_id, room_id, card_id })
     return function (dispatch) {
         return fetch(`${config.api.url}/choose-winner`, {
             method: 'post',

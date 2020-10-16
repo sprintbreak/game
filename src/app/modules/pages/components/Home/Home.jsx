@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Header from './../../../components/Header/Header';
 import imgHome from './../../../../../assets/img/juego_crop.png';
 import { authenticateWs, logout } from './../../../store/actions/loginActions';
-import { joinRoom } from './../../../store/actions/roomActions';
+import { joinRoom, leaveRoom } from './../../../store/actions/roomActions';
 import { initializePlayer } from './../../../store/actions/playerActions';
 import { wsDispatch } from './../../../store/actions/wsActions';
 import { useHistory } from 'react-router-dom';
@@ -82,6 +82,7 @@ const mapDispatchToProps = dispatch => {
         dispatchWs: (id, data, { props, ws }) => dispatch(wsDispatch(id, data, { props, ws })),
         initializePlayer: (id) => dispatch(initializePlayer(id)),
         joinRoom: (id, session, ws) => dispatch(joinRoom(id, session, ws)),
+        leaveRoom: (id, session, ws) => dispatch(leaveRoom(id, session, ws)),
         logout: (id, session) => dispatch(logout(id, session)),
     }
 }

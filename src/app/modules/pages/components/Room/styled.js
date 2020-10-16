@@ -12,6 +12,15 @@ export const Container = styled.div`
     justify-content: center;
     margin-top: 1.5rem;
 
+    h4 {
+        color: #262533;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
     .play-container {
         display: flex;
         flex-direction: column;

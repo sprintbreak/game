@@ -54,11 +54,12 @@ const INITIAL_STATE = {
 export function appReducer(state = INITIAL_STATE, action) {
     switch(action.type) {
         case 'CARD_SUBMITTED': {
+            console.log(action.payload)
             return {
                 ...state,
                 selectedCards: [
                     ...state.selectedCards,
-                    { ...action.payload.card }
+                    { ...action.payload.data.card }
                 ],
             }
         }
@@ -121,7 +122,9 @@ export function appReducer(state = INITIAL_STATE, action) {
                 statusLogin: 'Logged out',
                 logged: false,
                 user_id: '',
-                session: {}
+                session: {},
+                superpoints: '',
+                points: '',
             }
         }
         case 'NEW_MESSAGE': {
@@ -298,6 +301,7 @@ export function appReducer(state = INITIAL_STATE, action) {
             }
         }
         case 'WINNER_SUBMITTED': {
+            console.log('Winner submitted: ', action.payload);
             return {
                 ...state,
                 submitted: true,

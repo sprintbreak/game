@@ -47,7 +47,6 @@ export function register(id, { data }) {
 }
 
 export function login(id, { origin, data }) {
-    console.log("Post /login:", { data })
     if(origin === 'santander') {
         return function(dispatch) {
             dispatch({ type: 'LOADING_ON' });
@@ -86,19 +85,6 @@ export function login(id, { origin, data }) {
                     .then(json => {
                         console.log("Received:", json)
 
-                        const session = {
-                            user_id: json.id,
-                            token: json.token,
-                            expires: json.expires
-                        }
-
-                        // ws.sendMessage(JSON.stringify({
-                        //     type: 'AUTHENTICATE',
-                        //     id: session.user_id,
-                        //     token: session.token,
-                        //     origin: session.origin
-                        // }))
-
                         dispatch({
                             type: 'LOGIN_SUCCESS',
                             payload: {
@@ -111,6 +97,9 @@ export function login(id, { origin, data }) {
                                 }
                             }
                         })
+
+                        localStorage.setItem('logged', true);
+
                         dispatch({ type: 'LOADING_OFF' });
 
                     })
@@ -130,6 +119,8 @@ export function login(id, { origin, data }) {
     }
 
     return function(dispatch) {
+        console.log('Login google')
+        dispatch({ type: 'LOADING_ON' });
         return fetch(`${config.api.url}/login`, {
             method: 'post', 
             mode: 'cors', 
@@ -142,20 +133,6 @@ export function login(id, { origin, data }) {
         .then(response => response.json())
         .then(json => {
             console.log("Received:", json)
-            dispatch({ type: 'LOADING_ON' });
-
-            // Autentico el token después de login
-            const session = {
-                user_id: json.id,
-                token: json.token,
-                expires: json.expires
-            }
-            // ws.sendMessage(JSON.stringify({
-            //     type: 'AUTHENTICATE',
-            //     id: session.user_id,
-            //     token: session.token,
-            //     origin: session.origin
-            // }))
 
             dispatch({
                 type: 'LOGIN_SUCCESS',
@@ -169,6 +146,9 @@ export function login(id, { origin, data }) {
                     }
                 }
             });
+
+            localStorage.setItem('logged', true);
+
             dispatch({ type: 'LOADING_OFF' });
         }).catch((error) => {
             dispatch({ type: 'LOGIN_ERROR', payload: { id, error } });
@@ -193,10 +173,16 @@ export function logout(id, session) {
         })
         .then(response => response.json())
         .then(json => {
+
+            localStorage.setItem('logged', false);
+
             dispatch({ type: 'LOGOUT', payload: { id } })
             dispatch({ type: 'LOADING_OFF' });
         })
         .catch(error => {
+
+            localStorage.setItem('logged', false);
+
             dispatch({ type: 'LOGOUT', payload: { id } })
             dispatch({ type: 'LOADING_OFF' });
         })
