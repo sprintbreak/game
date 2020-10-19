@@ -1,6 +1,6 @@
 {
-  "main.css": "./css/main.22ad8ba6b90b929de5f0.css",
-  "main.js": "./main.22ad8ba6b90b929de5f0.bundle.js",
+  "main.css": "./css/main.85030e1fb246002db6ee.css",
+  "main.js": "./main.85030e1fb246002db6ee.bundle.js",
   "favicon.png": "./favicon.png",
   "fonts/font-awesome.min.css": "./fonts/fontawesome-webfont.woff2",
   "images/access-denied.svg": "./images/access-denied.svg",
@@ -8,6 +8,8 @@
   "images/dorso-card.svg": "./images/dorso-card.svg",
   "images/elsa-white.svg": "./images/elsa-white.svg",
   "images/elsa.svg": "./images/elsa.svg",
+  "images/eye-grey.svg": "./images/eye-grey.svg",
+  "images/eye-white.svg": "./images/eye-white.svg",
   "images/font-awesome.min.css": "./images/fontawesome-webfont.svg",
   "images/juego_crop.png": "./images/juego_crop.png",
   "images/logo.png": "./images/logo.png",
