@@ -48,7 +48,7 @@ export function submitCard(id, session, room_id, card_id) {
             dispatch({ type: 'SUBMIT_CARD', payload: { response: json, id, status: '' } })
         })
         .catch(error => {
-            dispatch({ type: 'ERROR', payload: { id, error }})
+            dispatch({ type: 'ERROR', payload: { id, error: "Ocurrió un error, intente nuevamente" }})
         })
     }
 }
@@ -77,7 +77,7 @@ export function submitWinner(id, session, room_id, card_id) {
             dispatch({ type: 'SUBMIT_WINNER', payload: { response: json, id, status: '' } })
         })
         .catch(error => {
-            dispatch({ type: 'ERROR', payload: { id, error } })
+            dispatch({ type: 'ERROR', payload: { id, error: "Ocurrió un error, intente nuevamente" } })
         })
     }
 }

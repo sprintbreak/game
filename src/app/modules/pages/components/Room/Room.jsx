@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import config from '../../../../config/config';
 import Card from './../../../components/Card/Card';
+import CardBack from './../../../components/Card/CardBack';
 import Header from './../../../components/Header/Header';
 import Score from './../../../components/Score/Score';
 import Timer from './../../../components/Timer/Timer';
-import Chat from './../../../components/Chat/Chat';
+import Chat from './../../../components/Chat/Chat'; 
+import ModalRoom from './../../../components/Modal/ModalRoom';
 import Websocket from 'react-websocket';
 import { DateHelper } from './../../../../shared/helpers/DateHelper'
 import { RandomHelper } from './../../../../shared/helpers/RandomHelper';
@@ -21,6 +24,7 @@ const randomHelper = new RandomHelper();
 
 const Room = props => {
 
+    const history = useHistory();
     const ws = React.createRef();
     const chat = React.createRef();
 
@@ -31,19 +35,33 @@ const Room = props => {
     });
 
     const [win, setWin] = useState(false);
-    const [timer, setTimer] = useState(true);
+    const [timerPlayer, setTimerPlayer] = useState(true);
+    const [timerHand, setTimerHand] = useState(false);
+    const [finishRoom, setFinishRoom] = useState(false);
     
     React.useEffect(() => {
-        resetState();
-    }, [props.inRound])
+        if(props.selectedCards) {
+            if(props.selectedCards.length > 1) setTimerHand(true);
+        }
+    }, [props.selectedCards])
 
-    // React.useEffect(() => {
-    //     resetState();
-    // }, [props.redCard])
+    React.useEffect(() => {
+        if(props.statusRoom) {
+            if(props.statusRoom === "Closed") {
+                setFinishRoom(true);
+            }
+        }
+    }, [props.statusRoom])
+
+    React.useEffect(() => {
+        resetState();
+    }, [props.redCard])
 
     React.useEffect(() => {
         if(props.winner) {
-            if(props.winner.player === props.id) setWin(true);
+            if(props.winner.player === props.id) {
+                setWin(true);
+            }
         }
     }, [props.winner])
 
@@ -54,39 +72,26 @@ const Room = props => {
             content: '',
         })
         setWin(false);
-        setTimer(true);
+        setTimerPlayer(true);
+        setTimerHand(false);
     }    
 
     const secondsLeft = dateHelper.calculateSecondsLeftTo(props.roundLimit, props.chooseCardLimit, props.chooseWinnerLimit)
 
     const handleSelectCard = card => {
         const { submitCard, id, session, room } = props;
-        console.log('Carta seleccionada: ', card);
         setInSelected(true);
+        setTimerPlayer(false);
         setSelectedCardLocal(card);
         submitCard(id, session, room, card.id);
     }
 
     const handleSelectWinner = card => {
         const { id, session, room, submitWinner } = props;
-        console.log('Carta ganadora: ', card);
         setInSelected(true);
+        setTimerPlayer(false);
         submitWinner(id, session, room, card.id);
     }
-
-    // const handleSelectRandomCard = () => {
-    //     const { submitCard, id, session, room, whiteCards } = props;
-    //     const randomCard = whiteCards[randomHelper.getRandomInt(0, whiteCards.length)];
-    //     console.log('random card: ', randomCard);
-    //     // submitCard(id, session, room, randomCard)
-    // }
-
-    // const handleSelectRandomWinner = () => {
-    //     const { submitCard, id, session, room, whiteCards } = props;
-    //     const randomWinner = whiteCards[randomHelper.getRandomInt(0, whiteCards.length)];
-    //     console.log('random winner: ', randomWinner);
-    //     // submitCard(id, session, room, randomWinner)
-    // }
 
     const handleMessageClick = message => {
         props.sendMessage(props.id, props.session, message);
@@ -94,10 +99,9 @@ const Room = props => {
 
     const wsOpen = () => props.authenticateWs(ws.current, props.session);
 
-    const wsClose = data => console.log('WS Close', data);
+    const wsClose = data => {};
 
     const wsData = data => {
-        console.log('WS Recieved: ', data);
         props.dispatchWs(props.id, data, { props, ws: ws.current });
     }
 
@@ -118,12 +122,26 @@ const Room = props => {
             />
             <Header />
             <Container>
+
+                <Chat sendMessage={handleMessageClick} messages={props.messages} nickname={props.nickname} />
+
+                <ModalRoom
+                    active={finishRoom}
+                    // content={`Esta mesa ha finalizado. Ganó el jugador: ${props.winner.player}`}
+                    content={`Esta mesa ha finalizado.`}
+                    onSuccess={()=>history.replace("/home")}
+                    />
                 
+
                 { !props.inRound && (
                     <h4>El juego está por comenzar!</h4>
                 ) }
 
-                { props.inRound && (<div className="play-container">                
+                { props.inRound && (<div className="play-container">
+
+                    { props.playerType === "Hand" && <h4>SOS SCRUM MASTER</h4> }
+                    { props.playerType === "Player" && <h4>SOS JUGADOR</h4> }
+
                     <CardsWrapper>
 
                         { !inSelected ? (<Card
@@ -192,7 +210,7 @@ const Room = props => {
                                 text={props.winner.card.content}
                                 selected={true}
                                 win={win}
-                                />) : <Card /> }
+                                />) : <CardBack /> }
 
                                 { props.winner ? 
                                 (<p className="mensaje">La casa eligió</p>) : 
@@ -204,9 +222,10 @@ const Room = props => {
                         
                     </CardsWrapper>
                     <ActionsWrapper>
-                        { props.playerType === 'Player' && <Timer time={secondsLeft.seconds_to_card_limit} onComplete={()=>{}} /> }
-                        { props.playerType === 'Hand' && <Timer time={secondsLeft.seconds_to_winner_limit} onComplete={()=>{}} /> }
-                        <Score score={props.accumulatedPoints} />
+                        { timerPlayer && props.playerType === 'Player' && <Timer time={secondsLeft.seconds_to_card_limit} onComplete={()=>{}} /> }
+                        { timerHand && props.playerType === 'Hand' && <Timer color="#2ECC71" time={secondsLeft.seconds_to_winner_limit} onComplete={()=>{}} /> }
+                        <Score label="Puntos:" score={props.accumulatedPoints} />
+                        <Score label="Superpuntos:" score={ props.superpoints === '' ? '0' : props.superpoints } />
                     </ActionsWrapper>
                 </div>)}
                 {/* <Chat sendMessage={handleMessageClick} username={props.nickname} messages={props.messages} ref={chat} /> */}
@@ -236,6 +255,10 @@ const mapStateToProps = (state) => {
         selectedCards: state.appReducer.selectedCards,
         selectedWinnerCard: state.appReducer.selectedWinnerCard,
         session: state.appReducer.session,
+        statusLogin: state.appReducer.statusLogin,
+        statusPlayer: state.appReducer.statusPlayer,
+        statusRoom: state.appReducer.statusRoom,
+        statusRound: state.appReducer.statusRound,
         submitted: state.appReducer.submitted,
         superpoints: state.appReducer.superpoints,
         whiteCards: state.appReducer.whiteCards,

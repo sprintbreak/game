@@ -33,11 +33,12 @@ const Login = props => {
   });
   // loginRegister reemplaza el 'register' del ejemplo
   const [loginRegister, setLoginRegister] = useState(false);
+  const [registerSuccess, setRegisterSuccess] = useState(false);
 
   React.useEffect(() => {
     if(logged) {
       // setWebsocketState(ws.current);
-      history.push("/home");
+      history.replace("/home");
     }
   }, [logged]);
 
@@ -93,7 +94,7 @@ const Login = props => {
         password: pass,
         email,
         fullname: ''
-      }})
+      }}).then(() => setRegisterSuccess(true))
     }
   }
 
@@ -125,7 +126,7 @@ const Login = props => {
       <Container>
         <div className="wrapper">
           <div className="logo">
-            <a href="/">
+            <a href="/game">
               <img src={logo} alt="Sprint Break" />
             </a>
           </div>
@@ -194,6 +195,7 @@ const Login = props => {
                 { loginRegister && <Button className="button" onClick={() => setLoginRegister(false)}>Cancelar</Button> }
                 </div>
                 { error && <Alert severity="error">{error}</Alert> }
+                { registerSuccess && <Alert severity="success">Registro completado. Ya podés ingresar.</Alert> }
             </div>) : null }
         </div>
       </Container>

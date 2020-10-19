@@ -6,7 +6,7 @@ export const StyledScore = styled.div`
 
     p {
         color: #262533;
-        font-size: 35px;
+        font-size: 25px;
         font-weight: 700;
         text-transform: uppercase;
     }

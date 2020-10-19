@@ -15,7 +15,7 @@ import { Alert } from '@material-ui/lab'
 
 const Home = props => {
 
-    const { id, dispatchWs, session, initializePlayer, joinRoom, inRoom } = props;
+    const { id, error, dispatchWs, session, initializePlayer, joinRoom, inRoom } = props;
 
     const history = useHistory();
     const ws = React.createRef();
@@ -24,8 +24,12 @@ const Home = props => {
         initializePlayer(id);
     }, [])
 
+    // useEffect(() => {
+    //     console.log(error);
+    // }, [error])
+
     useEffect(() => {
-        if(inRoom) history.push("/room", ws.current);
+        if(inRoom) history.replace("/room", ws.current);
     }, [inRoom])
 
     const handleJoinRoom = () => {
@@ -64,7 +68,7 @@ const Home = props => {
                 <BtnHome>
                     <Button className="main_btn" variant="outlined" onClick={handleJoinRoom}>Entrar al juego</Button>
                 </BtnHome>
-                { props.error && <Alert severity="error">{props.error}</Alert> }
+                { error && <Alert severity="error">{error}</Alert> }
             </PageHome>
         </PageContainer>
     )
@@ -73,7 +77,7 @@ const Home = props => {
 const mapStateToProps = state => {
     return {
         error: state.appReducer.error,
-        id: state.appReducer.user_id,
+        id: state.appReducer.id,
         inRoom: state.appReducer.inRoom,
         session: state.appReducer.session,
     }

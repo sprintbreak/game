@@ -13,7 +13,7 @@ const NotLogged = () => {
         <Container>
             <div className="wrapper">
                 <div className="logo">
-                    <a href="/">
+                    <a href="/game">
                         <img src={logo} alt="Sprint Break" />
                     </a>
                 </div>
@@ -21,7 +21,7 @@ const NotLogged = () => {
                     <img src={deniedSvg} alt="access-denied-svg" width={150} />
                     <h4>Ups! No tenés acceso para ver este sitio</h4>
                 </div>
-                <Button onClick={() => history.push("/")}>Volver</Button>
+                <Button onClick={() => history.replace("/")}>Volver</Button>
             </div>
         </Container>
     )

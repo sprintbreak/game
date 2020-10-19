@@ -25,7 +25,7 @@ const Modal = ({ active, onCancel, joinRoom, session }) => {
     const handleSuccess = () => {
         // setNickname(value);
         joinRoom(session.user_id, session);
-        history.push("/room");
+        history.replace("/room");
     }
 
     return (active &&

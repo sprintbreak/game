@@ -43,7 +43,7 @@ const Counter = ({ remainingTime = INITIAL_TIME, onComplete }) => {
     );
 }
 
-const Timer = ({ time, onComplete }) => {
+const Timer = ({ time, onComplete, color = "#EC0000" }) => {
     // const [counter, setCounter] = useState(INITIAL_TIME);
 
     // useEffect(() => {
@@ -58,7 +58,7 @@ const Timer = ({ time, onComplete }) => {
             isPlaying
             duration={time}
             initialRemainingTime={time}
-            colors="#EC0000"
+            colors={color}
             size={80}
             strokeWidth={3}>
                 <Counter onComplete={onComplete} />

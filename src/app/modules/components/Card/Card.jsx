@@ -35,7 +35,7 @@ const Card = ({ win = false, color = "default", selected = false, text = "", id 
                     <p>{text}</p>
                 </CardContent>
                 <CardFooter>
-                    { icon && <img src={icon} alt="elsa" width={75} /> }
+                    { icon && <img src={icon} alt="elsa" width={50} /> }
                 </CardFooter>
             </CardWrapper>
         </CardContainer>

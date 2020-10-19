@@ -1,5 +1,5 @@
-import session from 'redux-persist/lib/storage/session';
 import { RandomHelper } from './../../../shared/helpers/RandomHelper';
+import Cookies from 'js-cookie';
 
 const randomHelper = new RandomHelper();
 
@@ -13,6 +13,7 @@ const INITIAL_STATE = {
     inRound: false,
     inRoom: false,
     loading: false,
+    loadingRoom: false,
     logged: false,
     messages: [],
     nickname: '',
@@ -44,7 +45,7 @@ const INITIAL_STATE = {
     submitted: false,
     superpoints: '',
     type: '',
-    user_id: randomHelper.getRandomId(),
+    user_id: '',
     waitingPlayers: 0,
     whiteCards: [],
     winner: null,
@@ -103,6 +104,18 @@ export function appReducer(state = INITIAL_STATE, action) {
                 loading: false
             }
         }
+        case 'LOADING_ROOM_ON': {
+            return {
+                ...state,
+                loadingRoom: true
+            }
+        }
+        case 'LOADING_ROOM_OFF': {
+            return {
+                ...state,
+                loadingRoom: false
+            }
+        }
         case 'LOGIN_SUCCESS': {
             return {
                 ...state,
@@ -110,6 +123,7 @@ export function appReducer(state = INITIAL_STATE, action) {
                 statusLogin: action.payload.status,
                 logged: action.payload.logged,
                 user_id: action.payload.response.id,
+                nickname: action.payload.response.username,
                 session: {
                     ...state.session,
                     user_id: action.payload.response.id,
@@ -337,8 +351,26 @@ export function appReducer(state = INITIAL_STATE, action) {
             }
         }
         default: {
-            return {
-                ...state,
+            if(typeof Cookies.get('session') !== "undefined") {
+                const cookiesSession = JSON.parse(Cookies.get('session'));
+                return {
+                    ...state,
+                    id: cookiesSession.id,
+                    statusLogin: cookiesSession.status,
+                    logged: cookiesSession.logged,
+                    nickname: cookiesSession.nickname,
+                    session: {
+                        ...state.session,
+                        user_id: cookiesSession.id,
+                        token: cookiesSession.token,
+                        origin: cookiesSession. origin,
+                        expires: cookiesSession.expires,
+                    }
+                }
+            } else {
+                return {
+                    ...state,
+                }
             }
         }
     }

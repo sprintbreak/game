@@ -14,14 +14,21 @@ const winShadow = keyframes`
   }
 `;
 
+/*
+    min-width: 180px;
+    max-width: 180px;
+    min-height: 250px;
+    max-height: 250px;
+ */
+
 export const CardContainer = styled.div`
     border: 0.5px solid #D1D1D1;
     border-radius: 15px;
     box-shadow: none;  
-    min-width: 220px;
-    max-width: 220px;
-    min-height: 320px;
-    max-height: 320px;
+    min-width: 180px;
+    max-width: 180px;
+    min-height: 250px;
+    max-height: 250px;
     margin: 1rem;
     transition: all 0.2s ease;
 
@@ -31,7 +38,7 @@ export const CardContainer = styled.div`
         border: 1px dashed rgba(0,0,0,0.5);
     }
     
-    &.blanca{
+    &.blanca {
         background: rgb(255,255,255);
         background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(250,250,250,1) 35%, rgba(245,245,245,1) 100%);
         color: black;
@@ -50,7 +57,7 @@ export const CardContainer = styled.div`
     }
 
     &.win {
-        border: 0.5px solid rgba(46, 204, 113) !important;
+        border: 0.5px solid #2ecc71 !important;
         animation: .5s ${winShadow} forwards infinite alternate !important;
     }
 
@@ -63,19 +70,28 @@ export const CardContainer = styled.div`
 `;
 
 export const CardWrapper = styled.div`
-    min-width: 220px;
-    max-width: 220px;
-    min-height: 320px;
-    max-height: 320px;
+    min-width: 180px;
+    max-width: 180px;
+    min-height: 250px;
+    max-height: 250px;
     display: flex;
     flex-direction: column;
     padding: 2rem;
+
+    &.card-back {
+        padding: 0;
+        img {
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+        }
+    }
 `;
 
 export const CardContent = styled.div`
     p {
         text-align: left;
-        font-size: 22px;
+        font-size: 18px;
         font-weight: 400;
     }
 `;

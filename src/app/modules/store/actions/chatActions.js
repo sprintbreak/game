@@ -26,7 +26,7 @@ export function sendMessage(id, session, message) {
             dispatch({ type: 'SEND_MESSAGE', payload: {id, response: json, message, username: session.username}})
         })
         .catch(error => {
-            dispatch({ type: 'ERROR', payload: { error }})
+            dispatch({ type: 'ERROR', payload: { error: "Ocurrió un error, intente nuevamente" }})
         })
     }
 }

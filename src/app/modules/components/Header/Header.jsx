@@ -8,21 +8,27 @@ import { leaveRoom, status } from './../../../modules/store/actions/roomActions'
 import { useHistory } from 'react-router-dom';
 
 const Header = ({ id, logged, inRoom, logout, leaveRoom, nickname, session, status, rooms, playingPlayers, waitingPlayers }) => {
+    
+    const history = useHistory();
 
     React.useEffect(() => {
         status();
     }, [rooms, playingPlayers, waitingPlayers])
 
-    const history = useHistory();
+    React.useEffect(() => {
+        if(!logged) history.replace("/login");
+    }, [logged])
+
+    React.useEffect(() => {
+        if(!inRoom) history.replace("/home");
+    }, [inRoom]);
 
     const handleSignOutClick = () => {
-        logout(id, session)
-        .then(() => history.push("/"));
+        logout(id, session);
     }
     
     const handleLeaveRoomClick = () => {
-        leaveRoom(id, session)
-        .then(() => history.push("/home"));
+        leaveRoom(id, session);
     }
 
     return (
@@ -34,14 +40,14 @@ const Header = ({ id, logged, inRoom, logout, leaveRoom, nickname, session, stat
                 <div className="main_menu">
                     <nav className="navbar navbar-expand-lg w-100">
                         <div className="container">
-                            <a className="navbar-brand" href="/">
-                            {/* <a className={ id ? "navbar-brand-username" : "navbar-brand" } href="/"> */}
+                            <a className="navbar-brand" href="/game">
+                            {/* <a className={ id ? "navbar-brand-username" : "navbar-brand" } href="/game"> */}
                                 <img src={logo} alt="Sprint Break" />
                             </a>
 
-                            <div className="nickname">
+                            { nickname && (<div className="nickname">
                                 <p>Usuario: {nickname}</p>
-                            </div>
+                            </div>) }
 
                             <div className="btn-salir">
                                 { inRoom && <Button onClick={handleLeaveRoomClick}>Abandonar</Button> }

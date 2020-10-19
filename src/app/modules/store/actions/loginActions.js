@@ -1,5 +1,6 @@
 import config from '../../../config/config';
 import crypto from 'crypto'
+import Cookies from 'js-cookie';
 
 export function authenticateWs(ws, session) {
     return function() {
@@ -46,7 +47,7 @@ export function register(id, { data }) {
             dispatch({ type: 'REGISTER_SUCCESS', payload: { id }})
         })
         .catch(error => {
-            dispatch({ type: 'ERROR', payload: { id, error }})
+            dispatch({ type: 'ERROR', payload: { id, error: "Ocurrió un error, intente nuevamente" }})
         })
     }
 }
@@ -114,7 +115,16 @@ export function login(id, { origin, data }) {
                                 }
                             })
 
-                            localStorage.setItem('logged', true);
+                            // localStorage.setItem('logged', true);
+                            Cookies.set('session', {
+                                id: json.id,
+                                token: json.token,
+                                expires: json.expires,
+                                logged: true,
+                                nickname: json.username,
+                                origin,
+                                status: "Logged"
+                            });
 
                             dispatch({ type: 'LOADING_OFF' });
 
@@ -172,7 +182,16 @@ export function login(id, { origin, data }) {
                     }
                 });
     
-                localStorage.setItem('logged', true);
+                // localStorage.setItem('logged', true);
+                Cookies.set('session', {
+                    id: json.id,
+                    token: json.token,
+                    expires: json.expires,
+                    logged: true,
+                    nickname: json.username,
+                    origin,
+                    status: "Logged"                 
+                });
     
                 dispatch({ type: 'LOADING_OFF' });
             }).catch((error) => {
@@ -189,38 +208,44 @@ export function login(id, { origin, data }) {
 export function logout(id, session) {
     return function(dispatch) {
         dispatch({ type: 'LOADING_ON' });
-        return fetch(`${config.api.url}/logout`, {
-            method: 'post',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Id': session.user_id,
-                'X-Session-Type': session.origin,
-                'X-Token': session.token
-            },
-            body: JSON.stringify({ id: session.user_id })
-        })
-        .then(response => {
-            if(!response.ok) {
-                throw 'Ocurrió un error, intente nuevamente';
-            }
-            return response.json()
-        })
-        .then(json => {
-
-            localStorage.setItem('logged', false);
-
-            dispatch({ type: 'LOGOUT', payload: { id } })
+        try {            
+            return fetch(`${config.api.url}/logout`, {
+                method: 'post',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Id': session.user_id,
+                    'X-Session-Type': session.origin,
+                    'X-Token': session.token
+                },
+                body: JSON.stringify({ id: session.user_id })
+            })
+            .then(response => {
+                if(!response.ok) {
+                    throw 'Ocurrió un error, intente nuevamente';
+                }
+                return response.json()
+            })
+            .then(json => {
+    
+                // localStorage.setItem('logged', false);
+                Cookies.set('session', {
+                    id: json.id,
+                    logged: false,
+                    status: "Not Logged"                 
+                });
+    
+                dispatch({ type: 'LOGOUT', payload: { id } })
+                dispatch({ type: 'LOADING_OFF' });
+            })
+            .catch(error => {
+                dispatch({ type: 'ERROR', payload: { error: "Ocurrió un error, intente nuevamente" } })
+                dispatch({ type: 'LOADING_OFF' });
+            })
+        } catch (error) {
+            dispatch({ type: 'ERROR', payload: { error: "Ocurrió un error, intente nuevamente" } })
             dispatch({ type: 'LOADING_OFF' });
-        })
-        .catch(error => {
-
-            localStorage.setItem('logged', false);
-
-            dispatch({ type: 'LOGOUT', payload: { id } })
-            dispatch({ type: 'ERROR', payload: { error } })
-            dispatch({ type: 'LOADING_OFF' });
-        })
+        }
     }
 }
 

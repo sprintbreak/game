@@ -11,6 +11,7 @@ import { PersistGate } from 'redux-persist/lib/integration/react'
 import { ThemeProvider, createGlobalStyle } from 'styled-components'
 
 import Loader from 'app/modules/components/Loader/LoaderContainer';
+import LoaderRoom from 'app/modules/components/Loader/LoaderRoomContainer';
 
 import 'assets/stylesheets/main.scss'
 
@@ -77,6 +78,7 @@ ReactDOM.render(
             <HashRouter basename="/">
                 <GlobalStyle />
                 <Loader size={50} />
+                <LoaderRoom size={50} />
                 <App>
                     <Body key='body' />
                 </App>
