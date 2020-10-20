@@ -1,6 +1,6 @@
 {
-  "main.css": "./css/main.d2503bd694da7e70f151.css",
-  "main.js": "./main.d2503bd694da7e70f151.bundle.js",
+  "main.css": "./css/main.5252db210e4dd61f0ec1.css",
+  "main.js": "./main.5252db210e4dd61f0ec1.bundle.js",
   "favicon.png": "./favicon.png",
   "fonts/font-awesome.min.css": "./fonts/fontawesome-webfont.woff2",
   "images/access-denied.svg": "./images/access-denied.svg",
@@ -13,5 +13,6 @@
   "images/font-awesome.min.css": "./images/fontawesome-webfont.svg",
   "images/juego_crop.png": "./images/juego_crop.png",
   "images/logo.png": "./images/logo.png",
+  "images/question-solid.svg": "./images/question-solid.svg",
   "index.html": "./index.html"
 }
