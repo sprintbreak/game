@@ -16,8 +16,8 @@ export const ImgHome = styled.div`
     margin: 2rem;
 
     @media screen 
-    and (device-width: 360px) 
-    and (device-height: 640px) {
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
         img {
             width: 300px !important;
         }

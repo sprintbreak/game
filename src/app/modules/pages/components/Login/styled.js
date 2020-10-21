@@ -7,8 +7,8 @@ export const Container = styled.div`
     transition: all .3s ease;
 
     @media screen 
-    and (device-width: 360px) 
-    and (device-height: 640px) {
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
 
         margin: 3rem;
 

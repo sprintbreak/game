@@ -29,8 +29,8 @@ export const GameRulesButton = styled.span`
     transition: all .2s ease-in-out;
 
     @media screen 
-    and (device-width: 360px) 
-    and (device-height: 640px) {
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
         max-width: 40px;
         min-width: 40px;
         max-height: 40px;

@@ -24,8 +24,8 @@ const StyledContainer = styled.div`
     z-index: 103;
 
     @media screen 
-    and (device-width: 360px) 
-    and (device-height: 640px) {
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
 
         height: 90%;
 

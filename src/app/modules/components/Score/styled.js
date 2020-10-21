@@ -8,8 +8,8 @@ export const StyledScore = styled.div`
     margin-bottom: 1rem;
 
     @media screen 
-    and (device-width: 360px) 
-    and (device-height: 640px) {
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
 
         margin-left: 1rem;
         margin-bottom: 1rem;

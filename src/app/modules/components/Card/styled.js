@@ -33,8 +33,8 @@ export const CardContainer = styled.div`
     transition: all 0.2s ease;
 
     @media screen 
-    and (device-width: 360px) 
-    and (device-height: 640px) {
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
         min-width: 90px;
         max-width: 90px;
         min-height: 125px;
@@ -108,8 +108,8 @@ export const CardWrapper = styled.div`
     padding: 2rem;
 
     @media screen 
-    and (device-width: 360px) 
-    and (device-height: 640px) {
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
         min-width: 90px;
         max-width: 90px;
         min-height: 125px;
@@ -135,8 +135,8 @@ export const CardContent = styled.div`
     }
 
     @media screen 
-    and (device-width: 360px) 
-    and (device-height: 640px) {
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
         p {
             font-size: 9px;
         }
@@ -150,8 +150,8 @@ export const CardFooter = styled.div`
     justify-content: flex-end;
 
     @media screen 
-    and (device-width: 360px) 
-    and (device-height: 640px) {
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
         img {
             width: 25px;
         }

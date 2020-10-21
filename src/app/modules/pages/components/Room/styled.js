@@ -13,8 +13,8 @@ export const Container = styled.div`
     margin-top: 1.5rem;
 
     @media screen 
-    and (device-width: 360px) 
-    and (device-height: 640px) {
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
 
         margin-top: 0 !important;
 
@@ -115,8 +115,8 @@ export const CardsWrapper = styled.div`
     transition: all .1s ease-in-out;
 
     @media screen 
-    and (device-width: 360px) 
-    and (device-height: 640px) {
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
         
         flex-wrap: wrap;
     

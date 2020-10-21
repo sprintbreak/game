@@ -6,8 +6,8 @@ export const TimerWrapper = styled.div`
     margin-bottom: 3rem;
 
     @media screen 
-    and (device-width: 360px) 
-    and (device-height: 640px) {
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
 
         margin-bottom: 1rem !important;
 
@@ -29,15 +29,15 @@ export const TimeWrapper = styled.div`
     height: 30px;
 
     @media screen 
-    and (device-width: 360px) 
-    and (device-height: 640px) {
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
 
         width: 25px;
         height: 15px;
         
-        & div.time {
+        /* & div.time {
             font-size: 15px !important;
-        }
+        } */
     }
 
     & div.time {
