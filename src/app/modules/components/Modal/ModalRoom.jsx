@@ -26,7 +26,7 @@ const StyledContainer = styled.div`
     @media screen 
     and (device-width: 360px) 
     and (device-height: 640px) {
-        
+
         height: 90%;
 
         .mensaje {
@@ -39,6 +39,14 @@ const StyledContainer = styled.div`
                 }
                 p {
                     font-size: 14px !important;
+                }
+            }
+
+            .footer {
+                .button {
+                    font-size: 8px;
+                    max-width: 110px;
+                    min-width: 110px;
                 }
             }
         }

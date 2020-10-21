@@ -40,8 +40,16 @@ export const CardContainer = styled.div`
         min-height: 125px;
         max-height: 125px;
 
-        &, &.scrum {
+        &, &.blanca, &.back, &.scrum {
             margin: .25rem !important;
+        }
+
+        &.blanca, &.back {
+            margin-top: 2.5rem !important;
+        }
+
+        &.scrum {
+            margin-top: .25rem !important;
         }
     }
 

@@ -362,14 +362,16 @@ const Room = props => {
                         {/* JUGADOR */}
 
                         { props.playerType === "Player" && !onSelectedPlayer && 
-                            props.whiteCards.map(card =>
+                            (<>
+                            {props.whiteCards.map(card =>
                                 <Card 
                                 key={card.id}
                                 id={card.id}
                                 color="blanca"
                                 text={card.content}
                                 onClick={handleSelectCard}
-                            />) 
+                            />)}
+                            </>)
                         }
 
                         { props.playerType === "Player" && onSelectedPlayer && 

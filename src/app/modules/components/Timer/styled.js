@@ -11,7 +11,7 @@ export const TimerWrapper = styled.div`
 
         margin-bottom: 1rem !important;
 
-        & div:first-child {
+        /* & div:first-child {
             width: 40px !important;
             height: 40px !important;
 
@@ -19,7 +19,7 @@ export const TimerWrapper = styled.div`
                 width: 40px !important;
                 height: 40px !important;
             }
-        }
+        } */
     }
 `;
 

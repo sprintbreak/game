@@ -16,6 +16,8 @@ export const Container = styled.div`
     and (device-width: 360px) 
     and (device-height: 640px) {
 
+        margin-top: 0 !important;
+
         .play-container {
             
             .instructions {
@@ -24,7 +26,7 @@ export const Container = styled.div`
                 }
                 p {
                     font-size: 11px !important;
-                    width: 50%;
+                    width: 80% !important;
                     margin: 0 auto;
                     margin-top: 0 !important;
                 }
