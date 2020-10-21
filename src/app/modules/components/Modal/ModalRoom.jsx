@@ -23,6 +23,28 @@ const StyledContainer = styled.div`
     width: 100%;
     z-index: 103;
 
+    @media screen 
+    and (device-width: 360px) 
+    and (device-height: 640px) {
+        
+        height: 90%;
+
+        .mensaje {
+            width: 95% !important;
+
+            .content {
+                h4 {
+                    font-size: 24px !important;
+                    margin-top: 0;
+                }
+                p {
+                    font-size: 14px !important;
+                }
+            }
+        }
+    }
+
+
     .mensaje {
         background: rgb(236,0,0);
         background: radial-gradient(circle, rgba(236,0,0,1) 0%, rgba(220,0,0,1) 80%, rgba(204,0,0,1) 100%);

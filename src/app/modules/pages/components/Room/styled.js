@@ -12,6 +12,33 @@ export const Container = styled.div`
     justify-content: center;
     margin-top: 1.5rem;
 
+    @media screen 
+    and (device-width: 360px) 
+    and (device-height: 640px) {
+
+        .play-container {
+            
+            .instructions {
+                h4 {
+                    font-size: 18px !important;
+                }
+                p {
+                    font-size: 11px !important;
+                    width: 50%;
+                    margin: 0 auto;
+                    margin-top: 0 !important;
+                }
+            }
+        }
+
+        .score {
+
+        }
+
+    }
+
+    
+
     .loader-round {
         display: flex;
         flex-direction: column;
@@ -84,6 +111,14 @@ export const CardsWrapper = styled.div`
     align-items: center;
     justify-content: center;
     transition: all .1s ease-in-out;
+
+    @media screen 
+    and (device-width: 360px) 
+    and (device-height: 640px) {
+        
+        flex-wrap: wrap;
+    
+    }
 
     .playing-cards {
         display: flex;
