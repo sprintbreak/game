@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components';
-import { ClipLoader } from 'react-spinners';
+import { PuffLoader } from 'react-spinners';
 import elsa from './../../../../assets/img/elsa-white.svg';
 
 const StyledLoader = styled.div`
@@ -46,10 +46,10 @@ const StyledLoader = styled.div`
     }
 `;
 
-const LoaderRoom = ({ loadingRoom = false, size = 30, color = '#ec0000' }) => {
+const LoaderRoom = ({ loadingRoom = false, size = 100, color = '#ec0000' }) => {
     return ( loadingRoom ? 
         (<StyledLoader>
-            <div className="mensaje">
+            {/* <div className="mensaje">
                 <div className="content">
                     <p>Estamos esperando que se sume más gente a la mesa para poder arrancar la partida!</p>
                     <p>Si no te gusta esperar, podés compartir este link para invitar a otras personas y así empezar a jugar.</p>
@@ -60,8 +60,8 @@ const LoaderRoom = ({ loadingRoom = false, size = 30, color = '#ec0000' }) => {
                     </span>
                     <img src={elsa} alt="elsa" width={100} />
                 </div>
-            </div>
-            <ClipLoader
+            </div> */}
+            <PuffLoader
                 size={size}
                 color={color}
                 loading={loadingRoom}

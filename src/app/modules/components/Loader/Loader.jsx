@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components';
-import { ClipLoader } from 'react-spinners';
+import { PuffLoader } from 'react-spinners';
 
 const StyledLoader = styled.div`
     height: 100%;
@@ -16,10 +16,10 @@ const StyledLoader = styled.div`
     background-color: rgba(51, 51, 51, 0.7);
 `;
 
-const Loader = ({ loading = false, size = 30, color = '#ec0000' }) => {
+const Loader = ({ loading = false, size = 100, color = '#ec0000' }) => {
     return ( loading ? 
         (<StyledLoader>
-            <ClipLoader 
+            <PuffLoader 
                 size={size}
                 color={color}
                 loading={loading}

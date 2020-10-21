@@ -3,6 +3,7 @@ import { Container, ChatContainer, ChatWidgetButton } from './styled';
 import elsa from './../../../../assets/img/elsa-white.svg';
 import close from './../../../../assets/img/close-cross.svg';
 import Button from './../Button/Button';
+import Badge from '@material-ui/core/Badge';
 
 // const mensajes = [
 //     { name: 'Juanse', content: 'Hola, cómo estás?' },
@@ -17,6 +18,7 @@ const Chat = ({ nickname, messages, sendMessage }) => {
 
     const [active, setActive] = useState(false);
     const [newMessage, setNewMessage] = useState('');
+    const [countNewMessages, setCountNewMessages] = useState(0);
 
     const chatRef = React.useRef(null);
 

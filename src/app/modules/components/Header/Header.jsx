@@ -13,44 +13,46 @@ const Header = ({ id, logged, inRoom, logout, leaveRoom, nickname, session, stat
 
     React.useEffect(() => {
         status();
-    }, [rooms, playingPlayers, waitingPlayers])
+    }, [playingPlayers])
 
     React.useEffect(() => {
         if(!logged) history.replace("/login");
     }, [logged])
 
-    React.useEffect(() => {
-        if(!inRoom) history.replace("/home");
-    }, [inRoom]);
+    // React.useEffect(() => {
+    //     if(!inRoom) history.replace("/home");
+    // }, [inRoom]);
 
     const handleSignOutClick = () => {
         logout(id, session);
     }
     
     const handleLeaveRoomClick = () => {
-        leaveRoom(id, session);
+        history.push("/");
+        // leaveRoom(id, session);
     }
 
     return (
         <Container>
             <header className="header_area">
                 <div className="status-wrapper">
-                    <p>Salas activas: {rooms}</p> | <p>Jugadores activos: {playingPlayers}</p> | <p>Jugadores en espera: {waitingPlayers}</p>
+                    {/* <p>Salas activas: {rooms}</p> | <p>Jugadores activos: {playingPlayers}</p> | <p>Jugadores en espera: {waitingPlayers}</p> */}
+                    <p>Hay {playingPlayers} personas jugando</p>
                 </div>
                 <div className="main_menu">
                     <nav className="navbar navbar-expand-lg w-100">
                         <div className="container">
-                            <a className="navbar-brand" href="/game">
+                            <a className="navbar-brand" href="https://sprintbreak.github.io/">
                             {/* <a className={ id ? "navbar-brand-username" : "navbar-brand" } href="/game"> */}
                                 <img src={logo} alt="Sprint Break" />
                             </a>
 
                             { nickname && (<div className="nickname">
-                                <p>Usuario: {nickname}</p>
+                                <p>Tu usuario: {nickname}</p>
                             </div>) }
 
                             <div className="btn-salir">
-                                { inRoom && <Button onClick={handleLeaveRoomClick}>Abandonar</Button> }
+                                { inRoom && <a href="https://sprintbreak.github.io/"><Button onClick={()=>{}}>Abandonar</Button></a> }
                                 { !inRoom && <Button onClick={handleSignOutClick}>Logout</Button> }
                             </div>
 
@@ -64,7 +66,7 @@ const Header = ({ id, logged, inRoom, logout, leaveRoom, nickname, session, stat
 
 const mapStateToProps = state => {
     return {
-        id: state.appReducer.user_id,
+        id: state.appReducer.id,
         inRoom: state.appReducer.inRoom,
         nickname: state.appReducer.nickname,
         session: state.appReducer.session,

@@ -67,6 +67,14 @@ export const CardContainer = styled.div`
         background: radial-gradient(circle, rgba(236,0,0,1) 0%, rgba(220,0,0,1) 80%, rgba(204,0,0,1) 100%);
         color: #ffffff;
     }
+
+    &.blanca, &.back {
+        margin-top: 2.5rem;
+    }
+
+    &.scrum {
+        margin: 1rem;
+    }
 `;
 
 export const CardWrapper = styled.div`

@@ -5,7 +5,7 @@ import elsaWhite from './../../../../assets/img/elsa-white.svg';
 import { useOutsideClick } from './../../../shared/helpers/useOutsideClick';
 
 
-const Card = ({ win = false, color = "default", selected = false, text = "", id = null, onClick = () => {} }) => {
+const Card = ({ scrum = false, win = false, color = "default", selected = false, text = "", id = null, onClick = () => {} }) => {
 
     const [icon, setIcon] = useState(null);
 
@@ -29,7 +29,7 @@ const Card = ({ win = false, color = "default", selected = false, text = "", id 
 
     return (
         // <CardContainer onClick={handleClick} className={`card ${color}`}>
-        <CardContainer ref={ref} onClick={handleClick} className={`card ${color} ${ checked ? "checked" : "" } ${win ? "win" : ""}`}>
+        <CardContainer ref={ref} onClick={handleClick} className={`card ${color} ${ checked ? "checked" : "" } ${win ? "win" : ""} ${scrum ? "scrum" : ""}`}>
             <CardWrapper>
                 <CardContent>
                     <p>{text}</p>

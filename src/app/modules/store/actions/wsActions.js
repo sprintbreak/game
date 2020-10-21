@@ -6,7 +6,7 @@ import { newRound, cardSubmitted, winnerSubmitted } from './roundActions'
 export const action = "WS_DISPATCHER"
 
 export function authenticateWs(id, ws, session) {
-    if (!session || !session.user_id) return function (dispatch) { console.log('Missing session') }
+    if (!session || !session.user_id) return function (dispatch) { /*console.log('Missing session')*/ }
     return function (dispatch) {
         const data = {
             type: 'AUTHENTICATE',
@@ -14,7 +14,7 @@ export function authenticateWs(id, ws, session) {
             token: session.token,
             origin: session.origin
         }
-        console.log("Sending authenticate", data)
+        // console.log("Sending authenticate", data)
         ws.sendMessage(JSON.stringify(data))
     }
 }
@@ -25,10 +25,10 @@ export function wsDispatch(id, message, { props, ws }) {
     try {
         json = JSON.parse(message)
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         return error
     }
-    console.log("Dispatching:", json)
+    // console.log("Dispatching:", json)
     if (json.type === 'AUTHENTICATION_REQUEST') {
         return authenticateWs(id, ws, props.session)
     }
@@ -45,7 +45,7 @@ export function wsDispatch(id, message, { props, ws }) {
         return roomClosed(id, json)
     }
     if (json.type === 'UPDATE_STATS') {
-        console.log('update stats')
+        // console.log('update stats')
         return updateStats(id, json)
     }
     if (json.type === 'UPDATE_PROFILE') {

@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import Websocket from 'react-websocket';
 import { useHistory } from "react-router-dom";
 import { connect } from 'react-redux';
-import { GoogleLoginButton, GithubLoginButton } from 'react-social-login-buttons';
+import { GoogleLoginButton } from 'react-social-login-buttons';
 import { GoogleLogin } from 'react-google-login';
 import { Container, LoginsContainer } from './styled';
 import { TextField } from '@material-ui/core';
-import { login, logout, register, setSessionState } from './../../../store/actions/loginActions';
-import GitHubLogin from 'react-github-login';
+import { login, loginGoogle, logout, register, setSessionState } from './../../../store/actions/loginActions';
+// import GitHubLogin from 'react-github-login';
 import Button from './../../../components/Button/Button';
 import { Alert } from '@material-ui/lab';
 import logo from './../../../../../assets/img/logo.png';
@@ -16,12 +16,13 @@ import config from '../../../../config/config';
 
 const Login = props => {
 
-  const { error, id, loginAction, registerLogin, setSessionState, logged } = props;
+  const { error, id, loginAction, loginActionGoogle, registerLogin, setSessionState, logged } = props;
+
   // const { register, handleSubmit, watch, errors } = useForm();
   // const formRef = React.useRef(null);
 
   const history = useHistory();
-  const [loginLocal, setLoginLocal] = useState(false);
+  const [loginLocal, setLoginLocal] = useState(true);
 
   const [user, setUser] = useState('');
   const [pass, setPass] = useState('');
@@ -34,6 +35,11 @@ const Login = props => {
   // loginRegister reemplaza el 'register' del ejemplo
   const [loginRegister, setLoginRegister] = useState(false);
   const [registerSuccess, setRegisterSuccess] = useState(false);
+  const [alertError, setAlertError] = useState(false);
+
+  React.useEffect(() => {
+    if(error !== "") setAlertError(true);
+  }, [error])
 
   React.useEffect(() => {
     if(logged) {
@@ -81,7 +87,7 @@ const Login = props => {
         data: { 
           username: user, 
           password: pass 
-        } 
+        }
       })
     }
   }
@@ -104,37 +110,42 @@ const Login = props => {
       origin_id: response.googleId,
       token: response.idToken
     })
-    loginAction(id, { origin: 'google', data: response })
+    loginActionGoogle({ origin: 'google', data: response })
   }
   const handleGoogleLoginFailure = response => {
     console.error(JSON.stringify(response));
   }
 
-  const handleGitHubLoginSuccess = response => {
-    console.log(JSON.stringify(response))
-    setSessionState({
-      origin: "github",
-      code: response.code,
-    })
-    loginAction(id, { origin: 'github', data: response })
+  const handleUserClick = () => {
+    setLoginLocal(true);
+    setAlertError(false);
   }
-  const handleGitHubLoginFailure = response => {
-    console.error(JSON.stringify(response));
-  }
+
+  // const handleGitHubLoginSuccess = response => {
+  //   console.log(JSON.stringify(response))
+  //   setSessionState({
+  //     origin: "github",
+  //     code: response.code,
+  //   })
+  //   loginAction(id, { origin: 'github', data: response })
+  // }
+  // const handleGitHubLoginFailure = response => {
+  //   console.error(JSON.stringify(response));
+  // }
 
   return (
       <Container>
         <div className="wrapper">
           <div className="logo">
-            <a href="/game">
+            <a href="https://sprintbreak.github.io/">
               <img src={logo} alt="Sprint Break" />
             </a>
           </div>
-          { !loginLocal ? (<LoginsContainer>
+          {/* { !loginLocal ? (<LoginsContainer> */}
 
-            <h4>Elegí cómo ingresar:</h4>
+            {/* <h4>Elegí cómo ingresar:</h4> */}
 
-            <GoogleLogin
+            {/* <GoogleLogin
               clientId="245942166200-hfb8qrm6m9cgip71l5iuteujhnriidn9.apps.googleusercontent.com"
               onSuccess={handleGoogleLoginSuccess} 
               onFailure={handleGoogleLoginFailure}
@@ -142,21 +153,21 @@ const Login = props => {
               render={renderProps => (
                 <GoogleLoginButton onClick={renderProps.onClick} />
               )}
-            />
-            <GitHubLogin
+            /> */}
+            {/* <GitHubLogin
               className="github-button"
               clientId="fd748d5a725cf8407786"
               onSuccess={handleGitHubLoginSuccess}
               onFailure={handleGitHubLoginFailure}
             >
               <GithubLoginButton />
-            </GitHubLogin>
+            </GitHubLogin> */}
            
 
-          </LoginsContainer>) : null }
+          {/* </LoginsContainer>) : null } */}
 
-          { !loginLocal ?
-            (<Button className="new-user" onClick={()=>setLoginLocal(true)}>Ingresar usuario</Button>) : null }
+          {/* { !loginLocal ?
+            (<Button className="new-user" onClick={handleUserClick}>Ingresar usuario</Button>) : null } */}
 
           { loginLocal ? 
             (<div className="form">
@@ -165,7 +176,7 @@ const Login = props => {
                 <TextField
                   onChange={e => setUser(e.target.value)}
                   id="username"
-                  label="Nombre de usuario"
+                  label="Nombre o apodo"
                   name="username"
                   autoComplete="username"
                   error={inputErrors.user}
@@ -190,13 +201,13 @@ const Login = props => {
                   helperText={inputErrors.email ? 'Este campo es requerido' : null}
                 />) : null }
                 { !loginRegister && <Button className="button" onClick={handleLoginWithUser}>Entrar</Button> }
-                { !loginRegister && <Button className="button" onClick={() => setLoginRegister(true)}>Soy nuevo</Button> }
+                { !loginRegister && <Button className="button" onClick={() => setLoginRegister(true)}>Es mi primera vez</Button> }
                 { loginRegister && <Button className="button" onClick={handleRegisterClick}>Registrarme</Button> }
                 { loginRegister && <Button className="button" onClick={() => setLoginRegister(false)}>Cancelar</Button> }
                 </div>
-                { error && <Alert severity="error">{error}</Alert> }
                 { registerSuccess && <Alert severity="success">Registro completado. Ya podés ingresar.</Alert> }
             </div>) : null }
+            { alertError && <Alert severity="error">{error}</Alert> }
         </div>
       </Container>
   );
@@ -213,6 +224,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     loginAction: (id, data) => dispatch(login(id, data)),
+    loginActionGoogle: (data) => dispatch(loginGoogle(data)),
     logoutAction: (id, session) => dispatch(logout(id, session)),
     registerLogin: (id, data) => dispatch(register(id, data)),
     setSessionState: (data) => dispatch(setSessionState(data)),

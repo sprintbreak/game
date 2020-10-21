@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const TimerWrapper = styled.div`
     display: flex;
     justify-content: center;
+    margin-bottom: 3rem;
 `;
 
 export const TimeWrapper = styled.div`

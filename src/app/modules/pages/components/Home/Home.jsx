@@ -12,36 +12,40 @@ import { wsDispatch } from './../../../store/actions/wsActions';
 import { useHistory } from 'react-router-dom';
 import Websocket from 'react-websocket';
 import { Alert } from '@material-ui/lab'
+import ModalRules from './../../../components/Modal/ModalRules';
 
 const Home = props => {
 
-    const { id, error, dispatchWs, session, initializePlayer, joinRoom, inRoom } = props;
+    const { id, error, logged, dispatchWs, session, initializePlayer, joinRoom, inRoom } = props;
 
     const history = useHistory();
     const ws = React.createRef();
+    const [modalRules, setModalRules] = useState(false);
 
     useEffect(() => {
         initializePlayer(id);
+        if(!logged) history.replace("/login");
     }, [])
 
     // useEffect(() => {
     //     console.log(error);
     // }, [error])
 
-    useEffect(() => {
-        if(inRoom) history.replace("/room", ws.current);
-    }, [inRoom])
+    // useEffect(() => {
+    //     if(inRoom) history.replace("/room");
+    // }, [inRoom])
 
     const handleJoinRoom = () => {
-        joinRoom(id, session, ws.current);
+        setModalRules(false);
+        joinRoom(id, session, ws.current).then(() => history.replace("/room"));
     }
 
     const wsOpen = () => authenticateWs(ws.current, session);
 
-    const wsClose = data => console.log('WS Close', data);
+    const wsClose = data => {};
 
     const wsData = data => {
-        console.log('WS Recieved: ', data);
+        // console.log('WS Recieved: ', data);
         dispatchWs(id, data, { props, ws: ws.current });
     }
 
@@ -62,11 +66,16 @@ const Home = props => {
             />
             <Header />
             <PageHome>
+                <ModalRules 
+                    active={modalRules} 
+                    onSuccess={handleJoinRoom}
+                    buttonText="Continuar" 
+                    />
                 <ImgHome>
                     <img src={imgHome} alt="cartas-home" width="600" />
                 </ImgHome>
                 <BtnHome>
-                    <Button className="main_btn" variant="outlined" onClick={handleJoinRoom}>Entrar al juego</Button>
+                    <Button className="main_btn" variant="outlined" onClick={() => setModalRules(true)}>Empezar a jugar</Button>
                 </BtnHome>
                 { error && <Alert severity="error">{error}</Alert> }
             </PageHome>
@@ -80,6 +89,7 @@ const mapStateToProps = state => {
         id: state.appReducer.id,
         inRoom: state.appReducer.inRoom,
         session: state.appReducer.session,
+        logged: state.appReducer.logged,
     }
 }
 

@@ -12,6 +12,29 @@ export const Container = styled.div`
     justify-content: center;
     margin-top: 1.5rem;
 
+    .loader-round {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly; 
+
+        h4 {
+            margin-bottom: 1rem;
+        }
+    }
+
+    .score {
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        bottom: 0;
+        left: 0;
+        margin-left: 1rem;
+        padding-bottom: .5rem;
+        transition: all .2s ease-in-out;
+        z-index: 1;
+    }
+
     h4 {
         color: #262533;
         text-align: center;
@@ -27,6 +50,31 @@ export const Container = styled.div`
         flex-direction: column;
         align-items: center;
         justify-content: center;
+
+        .instructions {
+
+            margin-bottom: 2rem;
+
+            h4, p {
+                color: #262533;
+                text-align: center;
+                letter-spacing: 1px;
+            }
+
+            h4 {
+                font-size: 30px;
+                margin-top: 0;
+                text-transform: uppercase;
+                font-weight: 700;
+            }
+
+            p {
+                margin-top: 2rem;
+                font-size: 18px;
+                font-weight: 400;
+                font-style: italic;
+            }
+        }
     }
 `;
 
@@ -48,9 +96,10 @@ export const CardsWrapper = styled.div`
         .mensaje {
             color: #262533;
             text-align: center;
+            font-style: italic;
             text-transform: uppercase;
             font-size: 16px;
-            font-weight: 700;
+            font-weight: 400;
             letter-spacing: 1px;
         }
     }
@@ -60,6 +109,6 @@ export const ActionsWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    margin-top: 3rem;
+    margin-top: 2rem;
     width: 100%;
 `;

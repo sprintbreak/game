@@ -40,6 +40,16 @@ export const Container = styled.div`
                 width: 80%;
             }
 
+            .btn-salir {
+                a {
+                    color: #262533;
+                    text-decoration: none;
+                }
+                a:hover, a:active, a:focus {
+                    text-decoration: none;
+                }
+            }
+
             .username {
                 width: 100%;
 

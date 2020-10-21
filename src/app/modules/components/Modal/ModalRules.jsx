@@ -40,11 +40,19 @@ const StyledContainer = styled.div`
 
         span a, p {
             color: #ffffff;
-            font-size: 20px;
+            font-size: 18px;
+        }
+
+        h4 {
+            color: #ffffff;
+            text-align: left;
         }
 
         .content {
             margin-bottom: 1rem;
+            p {
+                font-size: 18px;
+            }
         }
 
         .footer {
@@ -61,8 +69,18 @@ const StyledContainer = styled.div`
     }
 `;
 
+const ContentModalRules = () => (<div>
+    <h4>CÓMO JUGAR</h4>
+    <p>Existen dos roles dentro del juego: "Integrante del scrum" y "Scrum Master", que van rotando entre las personas que participan en todas las rondas.</p>
+    <p>Cuando te toque ser "Integrante del scrum" vas a poder elegir entre tus cartas de respuesta (blancas) la que mejor encaje con la carta de consigna (roja).</p>
+    <p>La persona con el rol de "Scrum Master" va a elegir una de las respuestas como ganadora.</p>
+    <p>La persona que haya jugado esa carta se lleva un punto.</p>
+    <p>Cuando alguien acumula 3 puntos gana la partida.</p>
+    <p>Tenés 20 segundos por ronda para jugar.</p>
+</div>);
 
-const ModalRoom = ({ active = false, content, onSuccess, onCancel = () => {}, buttonText = "Confirmar" }) => {
+
+const ModalRoom = ({ active = false, onSuccess, buttonText = "Confirmar" }) => {
 
     return (
         active ?
@@ -71,12 +89,11 @@ const ModalRoom = ({ active = false, content, onSuccess, onCancel = () => {}, bu
             <StyledContainer>
                 <div className="mensaje">
                     <div className="content">
-                        <p>{content}</p>
+                        <ContentModalRules />
                     </div>
                     <div className="footer">
-                        <img src={elsa} alt="elsa" width={80} />
-                        <Button className="button" onClick={onCancel}>{buttonText}</Button>
-                        <Button className="button" onClick={onSuccess}>Volver a jugar</Button>
+                        <img src={elsa} alt="elsa" width={100} />
+                        <Button className="button" onClick={onSuccess}>{buttonText}</Button>
                     </div>
                 </div>
             </StyledContainer>

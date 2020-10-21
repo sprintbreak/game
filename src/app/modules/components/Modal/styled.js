@@ -41,7 +41,7 @@ export const StyledModalContent = styled.div`
     order: 1;
     flex-direction: column;
 
-    h4 {
+    h4, p {
         padding-top: 1rem;
     }
 

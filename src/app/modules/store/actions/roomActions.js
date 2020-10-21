@@ -14,6 +14,7 @@ export const loadingRoomOff = () => {
 
 
 export function roomClosed(id, data) {
+    // console.log('roomClosed: ', data);
     return function(dispatch) {
         dispatch({ type: 'ROOM_CLOSED', payload: { id, data } })
     }
@@ -21,7 +22,7 @@ export function roomClosed(id, data) {
 
 export function joinRoom(id, session, ws) {
 
-    console.log("Post /enter-room:", { id, session })
+    // console.log("Post /enter-room:", { id, session })
     return function(dispatch) {
         
         try {
@@ -67,6 +68,7 @@ export function joinRoom(id, session, ws) {
 }
 
 export function leaveRoom(id, session) {
+
     return function(dispatch) {
         dispatch({ type: 'LOADING_ON' })
         try {
@@ -88,7 +90,7 @@ export function leaveRoom(id, session) {
             })
             .then(json => {
                 dispatch({ type: 'LOADING_OFF' })
-                dispatch({ type: 'ROOM_LEAVED', payload: { response: json, id, status: 'Leaved' } })
+                dispatch({ type: 'ROOM_LEAVED', payload: { session, id, status: 'Leaved' } })
             })
             .catch(error => {
                 dispatch({ type: 'LOADING_OFF' })

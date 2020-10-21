@@ -1,7 +1,7 @@
 import config from '../../../config/config'
 
 export function newRound(data, props) {
-    console.log('Action newRound')
+    // console.log('Action newRound')
     return function (dispatch) {
         dispatch({ type: 'ROUND_NEW', payload: { id: props.id, data } })
     }
@@ -54,7 +54,7 @@ export function submitCard(id, session, room_id, card_id) {
 }
 
 export function submitWinner(id, session, room_id, card_id) {
-    console.log("Post /choose-winner:", { id:session.user_id, room_id, card_id })
+    // console.log("Post /choose-winner:", { id:session.user_id, room_id, card_id })
     return function (dispatch) {
         return fetch(`${config.api.url}/choose-winner`, {
             method: 'post',

@@ -34,6 +34,7 @@ export const Container = styled.div`
 
         div.new-user {
             margin: 0 auto;
+            margin-bottom: 1.5rem;
         }
 
         .form {

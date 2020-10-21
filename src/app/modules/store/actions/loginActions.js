@@ -100,12 +100,12 @@ export function login(id, { origin, data }) {
                             return response.json()
                         })
                         .then(json => {
-                            console.log("Received:", json)
+                            // console.log("Received:", json)
 
                             dispatch({
                                 type: 'LOGIN_SUCCESS',
                                 payload: {
-                                    id,
+                                    id: json.id,
                                     response: json,
                                     status: "Logged",
                                     logged: true,
@@ -116,15 +116,16 @@ export function login(id, { origin, data }) {
                             })
 
                             // localStorage.setItem('logged', true);
-                            Cookies.set('session', {
-                                id: json.id,
-                                token: json.token,
-                                expires: json.expires,
-                                logged: true,
-                                nickname: json.username,
-                                origin,
-                                status: "Logged"
-                            });
+                            // Cookies.remove('session');
+                            // Cookies.set('session', {
+                            //     id: json.id,
+                            //     token: json.token,
+                            //     expires: json.expires,
+                            //     logged: true,
+                            //     nickname: json.username,
+                            //     origin,
+                            //     status: "Logged"
+                            // });
 
                             dispatch({ type: 'LOADING_OFF' });
 
@@ -147,102 +148,95 @@ export function login(id, { origin, data }) {
         }
     }
 
+}
+
+export function loginGoogle({ origin, data }) {
     return function(dispatch) {
-        console.log('Login google')
+        // console.log("Post /login:", { data })
         dispatch({ type: 'LOADING_ON' });
         try {
             return fetch(`${config.api.url}/login`, {
-                method: 'post', 
-                mode: 'cors', 
-                headers: {
+                method: 'post', mode: 'cors', headers: {
                     'Content-Type': 'application/json',
                     'X-Session-Type': origin
-                }, 
-                body: JSON.stringify(data)
+
+                }, body: JSON.stringify(data)
             })
-            .then(response => {
-                if(!response.ok) {
-                    throw 'Ocurrió un error, intente nuevamente';
-                }
-                return response.json()
-            })
-            .then(json => {
-                console.log("Received:", json)
-    
-                dispatch({
-                    type: 'LOGIN_SUCCESS',
-                    payload: {
-                        id,
-                        response: json,
-                        status: "Logged",
-                        logged: true,
-                        session: {
-                            origin
-                        }
+                .then(response => response)
+                .then(response => {
+                    if(!response.ok) {
+                        throw 'Ocurrió un error con Google, intente nuevamente o ingrese otro usuario';
                     }
-                });
-    
-                // localStorage.setItem('logged', true);
-                Cookies.set('session', {
-                    id: json.id,
-                    token: json.token,
-                    expires: json.expires,
-                    logged: true,
-                    nickname: json.username,
-                    origin,
-                    status: "Logged"                 
-                });
-    
-                dispatch({ type: 'LOADING_OFF' });
-            }).catch((error) => {
-                dispatch({ type: 'LOGIN_ERROR', payload: { id, error: "Ocurrió un error, intente nuevamente" } });
-                dispatch({ type: 'LOADING_OFF' });
-            })
+                    return response.json()
+                })
+                .then(json => {
+                    // console.log("Received:", json);
+        
+                    dispatch({
+                        type: 'LOGIN_SUCCESS',
+                        payload: {
+                            id: json.id,
+                            response: json,
+                            status: "Logged",
+                            logged: true,
+                            session: {
+                                origin
+                            }
+                        }
+                    });
+                    dispatch({ type: 'LOADING_OFF' })
+                }).catch((error) => {
+                    console.error('Error then catch', error);
+                    dispatch({ type: 'LOGIN_ERROR', payload: { error }})
+                    dispatch({ type: 'LOADING_OFF' });
+                })            
         } catch (error) {
-            dispatch({ type: 'LOGIN_ERROR', payload: { id, error: "Ocurrió un error, intente nuevamente" } });
+            console.error('Error trycatch: ', error);
+            dispatch({ type: 'LOGIN_ERROR', payload: { error }})
             dispatch({ type: 'LOADING_OFF' });
         }
-    }
+    };
 }
 
 export function logout(id, session) {
+    // console.log("Post /logout:", { id })
     return function(dispatch) {
         dispatch({ type: 'LOADING_ON' });
         try {            
             return fetch(`${config.api.url}/logout`, {
-                method: 'post',
-                mode: 'cors',
-                headers: {
+                method: 'post', mode: 'cors', headers: {
                     'Content-Type': 'application/json',
                     'X-Id': session.user_id,
                     'X-Session-Type': session.origin,
                     'X-Token': session.token
-                },
-                body: JSON.stringify({ id: session.user_id })
+                }, body: JSON.stringify({ id: session.user_id })
             })
             .then(response => {
+                // console.log(response)
                 if(!response.ok) {
                     throw 'Ocurrió un error, intente nuevamente';
                 }
-                return response.json()
+                return response;
             })
             .then(json => {
-    
                 // localStorage.setItem('logged', false);
-                Cookies.set('session', {
-                    id: json.id,
-                    logged: false,
-                    status: "Not Logged"                 
-                });
+                // Cookies.remove('session');
+                // Cookies.set('session', {
+                //     id: id,
+                //     logged: false,
+                //     status: "Not Logged"
+                // });
     
                 dispatch({ type: 'LOGOUT', payload: { id } })
                 dispatch({ type: 'LOADING_OFF' });
             })
             .catch(error => {
+                // console.log('catch fetch error: ', error);
                 dispatch({ type: 'ERROR', payload: { error: "Ocurrió un error, intente nuevamente" } })
                 dispatch({ type: 'LOADING_OFF' });
             })
         } catch (error) {
+            // console.log(error)
             dispatch({ type: 'ERROR', payload: { error: "Ocurrió un error, intente nuevamente" } })
             dispatch({ type: 'LOADING_OFF' });
         }

@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 const randomHelper = new RandomHelper();
 
 const INITIAL_STATE = {
-    accumulatedPoints: '',
+    accumulatedPoints: 0,
     chooseCardLimit: '',
     chooseWinnerLimit: '',
     dateLimit: '',
@@ -17,15 +17,20 @@ const INITIAL_STATE = {
     logged: false,
     messages: [],
     nickname: '',
+    playerLeaved: {
+        id: '',
+        name: ''
+    },
     playerType: '',
     players: {},
     playingPlayers: 0,
-    points: '',
+    points: 0,
     redCard: { 
         content: '' 
     },
     room: '',
     rooms: 0,
+    roomLeaved: false,
     roundLimit: '',
     selectedCard: 0,
     selectedCards: [],
@@ -37,30 +42,36 @@ const INITIAL_STATE = {
         code: '',
         origin: '',
         origin_id: '',
+        username: ''
     },
     statusPlayer: 'Initialized',
     statusLogin: '',
     statusRoom: '',
     statusRound: '',
     submitted: false,
-    superpoints: '',
+    superpoints: 0,
     type: '',
     user_id: '',
     waitingPlayers: 0,
     whiteCards: [],
     winner: null,
     websocket: null,
+    winnerSubmitted: false,
 }
 
 export function appReducer(state = INITIAL_STATE, action) {
     switch(action.type) {
         case 'CARD_SUBMITTED': {
-            console.log(action.payload)
+            // console.log(state.selectedCards)
+            const { data } = action.payload;
             return {
                 ...state,
                 selectedCards: [
                     ...state.selectedCards,
-                    { ...action.payload.data.card }
+                    { 
+                        id: data.card.id, 
+                        content: data.card.content,
+                    }
                 ],
             }
         }
@@ -80,8 +91,6 @@ export function appReducer(state = INITIAL_STATE, action) {
                     content: '' 
                 },
                 whiteCards: [],
-                points: '',
-                superpoints: '',
                 statusPlayer: 'Initialized',
                 type: '',
                 inRoom: false,
@@ -119,16 +128,20 @@ export function appReducer(state = INITIAL_STATE, action) {
         case 'LOGIN_SUCCESS': {
             return {
                 ...state,
+                id: action.payload.response.id,
                 error: '',
                 statusLogin: action.payload.status,
                 logged: action.payload.logged,
                 user_id: action.payload.response.id,
                 nickname: action.payload.response.username,
+                points: action.payload.response.points,
+                superpoints: action.payload.response.superpoints,
                 session: {
                     ...state.session,
                     user_id: action.payload.response.id,
                     token: action.payload.response.token,
-                    expires: action.payload.response.expires
+                    expires: action.payload.response.expires,
+                    username: action.payload.response.username,
                 }
             }
         }
@@ -137,7 +150,6 @@ export function appReducer(state = INITIAL_STATE, action) {
                 ...state,
                 statusLogin: 'Login error',
                 logged: false,
-                user_id: action.payload.id,
                 error: action.payload.error,
                 session: {},
             }
@@ -188,7 +200,9 @@ export function appReducer(state = INITIAL_STATE, action) {
                 inRoom: false,
                 accumulatedPoints: 0,
                 selectedCard: 0,
-                winner: null,
+                winner: {
+                    id: action.payload.data.winner_id
+                },
                 roundLimit: "",
                 chooseCardLimit: "",
                 chooseWinnerLimit: ""
@@ -198,6 +212,7 @@ export function appReducer(state = INITIAL_STATE, action) {
             return {
                 error: '',
                 room: '',
+                roomLeaved: true,
                 statusRoom: 'Leaved',
                 inRoom: false,
                 inRound: false,
@@ -207,11 +222,15 @@ export function appReducer(state = INITIAL_STATE, action) {
                 roundLimit: "",
                 chooseCardLimit: "",
                 chooseWinnerLimit: "",
+                playerLeaved: {
+                    id: action.payload.session.id,
+                    name: action.payload.session.username
+                },
             }
         }
         case 'ROUND_NEW': {
             const { data } = action.payload;
-            console.log('Round new:', data);
+            // console.log('Round new:', data);
             if(data.player_type === "hand") {
                 return {
                     ...state,
@@ -219,16 +238,18 @@ export function appReducer(state = INITIAL_STATE, action) {
                     whiteCards: [],
                     dateLimit: data.date_limit,
                     playerType: 'Hand',
-                    status: "Playing",
+                    statusRound: "Playing",
                     selectedCard: 0,
                     selectedCards: [],
                     submitted: false,
                     winner: null,
+                    winnerSubmitted: false,
                     roundLimit: data.round_limit,
                     chooseCardLimit: data.choose_card_limit,
                     chooseWinnerLimit: data.choose_winner_limit,
                     accumulatedPoints: data.accumulated_points,
                     inRound: true,
+                    players: data.players,
                 }
             } else if (data.player_type === 'player') {
                 return {
@@ -237,16 +258,18 @@ export function appReducer(state = INITIAL_STATE, action) {
                     whiteCards: data.cards,
                     dateLimit: data.date_limit,
                     playerType: 'Player',
-                    status: "Playing",
+                    statusRound: "Playing",
                     selectedCard: 0,
                     selectedCards: [],
                     submitted: false,
                     winner: null,
+                    winnerSubmitted: false,
                     roundLimit: data.round_limit,
                     chooseCardLimit: data.choose_card_limit,
                     chooseWinnerLimit: data.choose_winner_limit,
                     accumulatedPoints: data.accumulated_points,
                     inRound: true,
+                    players: data.players,
                 }
             } else {
                 return {
@@ -264,6 +287,7 @@ export function appReducer(state = INITIAL_STATE, action) {
                     origin: action.payload.data.origin,
                     origin_id: action.payload.data.origin_id,
                     token: action.payload.data.token,
+                    username: action.payload.data.username,
                 }
             }
         }
@@ -340,10 +364,12 @@ export function appReducer(state = INITIAL_STATE, action) {
             }
         }
         case 'WINNER_SUBMITTED': {
-            console.log('Winner submitted: ', action.payload);
+            // console.log('Winner submitted: ', action.payload);
             return {
                 ...state,
+                winnerSubmitted: true,
                 submitted: true,
+                selectedWinnerCard: action.payload.data.card,
                 winner: {
                     card: action.payload.data.card,
                     player: action.payload.data.winner,
@@ -351,27 +377,33 @@ export function appReducer(state = INITIAL_STATE, action) {
             }
         }
         default: {
-            if(typeof Cookies.get('session') !== "undefined") {
-                const cookiesSession = JSON.parse(Cookies.get('session'));
-                return {
-                    ...state,
-                    id: cookiesSession.id,
-                    statusLogin: cookiesSession.status,
-                    logged: cookiesSession.logged,
-                    nickname: cookiesSession.nickname,
-                    session: {
-                        ...state.session,
-                        user_id: cookiesSession.id,
-                        token: cookiesSession.token,
-                        origin: cookiesSession. origin,
-                        expires: cookiesSession.expires,
-                    }
-                }
-            } else {
-                return {
-                    ...state,
-                }
-            }
+            return {
+                ...state,
+            }          
         }
     }
 }
+
+
+// if(typeof Cookies.get('session') !== "undefined") {
+//     const cookiesSession = JSON.parse(Cookies.get('session'));
+//     return {
+//         ...state,
+//         id: cookiesSession.id,
+//         statusLogin: cookiesSession.status,
+//         logged: cookiesSession.logged,
+//         nickname: cookiesSession.nickname,
+//         session: {
+//             ...state.session,
+//             user_id: cookiesSession.id,
+//             token: cookiesSession.token,
+//             origin: cookiesSession. origin,
+//             expires: cookiesSession.expires,
+//             username: cookiesSession.nickname,
+//         }
+//     }
+// } else {
+//     return {
+//         ...state,
+//     }
+// }  
