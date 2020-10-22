@@ -10,7 +10,7 @@ module.exports = ({ ENV_FILE }, argv) => ({
     output: {
         path: path.join(__dirname, './build'),
         filename: '[name].[hash].bundle.js',
-        publicPath: '/'
+        publicPath: './'
     },
     module: {
         rules: [
