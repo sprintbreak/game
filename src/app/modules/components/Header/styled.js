@@ -36,6 +36,33 @@ export const Container = styled.div`
             justify-content: space-between;
             padding: 1rem;
 
+            @media screen 
+            and (min-device-width: 360px) 
+            and (max-device-height: 820px) {
+
+                .navbar-brand {
+                    margin-bottom: 1rem;
+                    margin-right: 0;
+                    img {
+                        width: 50px;
+                    }
+                }
+
+                .nickname {
+                    p {
+                        font-size: 11px;
+                    }
+                }
+
+                .btn-salir { 
+                    div {
+                        font-size: 11px;
+                        min-width: 0;
+                    }
+                }
+
+            }
+
             .navbar-brand-username {
                 width: 80%;
             }

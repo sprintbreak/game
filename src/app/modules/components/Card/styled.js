@@ -32,6 +32,27 @@ export const CardContainer = styled.div`
     margin: 1rem;
     transition: all 0.2s ease;
 
+    @media screen 
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
+        min-width: 90px;
+        max-width: 90px;
+        min-height: 125px;
+        max-height: 125px;
+
+        &, &.blanca, &.back, &.scrum {
+            margin: .25rem !important;
+        }
+
+        &.blanca, &.back {
+            margin-top: 2.5rem !important;
+        }
+
+        &.scrum {
+            margin-top: .25rem !important;
+        }
+    }
+
     &.default {
         background: rgba(0,0,0,.04);
         background: radial-gradient(circle, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.06) 35%, rgba(0,0,0,0.08) 100%);
@@ -86,6 +107,16 @@ export const CardWrapper = styled.div`
     flex-direction: column;
     padding: 2rem;
 
+    @media screen 
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
+        min-width: 90px;
+        max-width: 90px;
+        min-height: 125px;
+        max-height: 125px;
+        padding: 1rem;
+    }
+
     &.card-back {
         padding: 0;
         img {
@@ -102,6 +133,14 @@ export const CardContent = styled.div`
         font-size: 18px;
         font-weight: 400;
     }
+
+    @media screen 
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
+        p {
+            font-size: 9px;
+        }
+    }
 `;
 
 export const CardFooter = styled.div`
@@ -109,4 +148,12 @@ export const CardFooter = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
+
+    @media screen 
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
+        img {
+            width: 25px;
+        }
+    }
 `;

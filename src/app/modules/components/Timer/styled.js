@@ -4,12 +4,41 @@ export const TimerWrapper = styled.div`
     display: flex;
     justify-content: center;
     margin-bottom: 3rem;
+
+    @media screen 
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
+
+        margin-bottom: 1rem !important;
+
+        /* & div:first-child {
+            width: 40px !important;
+            height: 40px !important;
+
+            svg {
+                width: 40px !important;
+                height: 40px !important;
+            }
+        } */
+    }
 `;
 
 export const TimeWrapper = styled.div`
     position: relative;
     width: 50px;
     height: 30px;
+
+    @media screen 
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
+
+        width: 25px;
+        height: 15px;
+        
+        /* & div.time {
+            font-size: 15px !important;
+        } */
+    }
 
     & div.time {
         font-size: 30px;

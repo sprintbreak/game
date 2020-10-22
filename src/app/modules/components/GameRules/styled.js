@@ -28,6 +28,19 @@ export const GameRulesButton = styled.span`
     margin: auto 1rem 1rem 0;
     transition: all .2s ease-in-out;
 
+    @media screen 
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
+        max-width: 40px;
+        min-width: 40px;
+        max-height: 40px;
+        min-height: 40px;
+
+        img {
+            width: 17.5px;
+        }
+    }
+
     &:active {
         transform: scale(0.9);
     }

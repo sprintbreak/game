@@ -5,23 +5,29 @@ import elsa from './../../../../assets/img/elsa-white.svg';
 import { StyledModalContainer, StyledModalOverlay } from './styled';
 
 const StyledContainer = styled.div`
-    /* height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 20;
-    background-color: rgba(51, 51, 51, 0.7);
-    z-index: 20; */
-
     position: relative;
     width: 100%;
     z-index: 103;
+
+    @media screen 
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
+        height: 90%;
+
+        .mensaje {
+            width: 95% !important;
+
+            .content {
+                h4 {
+                    font-size: 24px !important;
+                    margin-top: 0;
+                }
+                p {
+                    font-size: 14px !important;
+                }
+            }
+        }
+    }
 
     .mensaje {
         background: rgb(236,0,0);
@@ -37,6 +43,9 @@ const StyledContainer = styled.div`
         flex-direction: column;
         margin-bottom: 3rem;
         padding: 2rem;
+
+        /* height: 90%;
+        overflow: scroll; */
 
         span a, p {
             color: #ffffff;

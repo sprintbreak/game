@@ -4,6 +4,18 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     margin: 5rem;
+    transition: all .3s ease;
+
+    @media screen 
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
+
+        margin: 3rem;
+
+        .wrapper .form {
+            width: 100% !important; 
+        }
+    }
 
     .wrapper {
         
@@ -65,8 +77,10 @@ export const Container = styled.div`
 
                 div.button {
                     margin-top: 1rem;
+                    min-width: 190px;
                 }
             }
+
         }
 
         .notlogged-content {

@@ -15,6 +15,14 @@ export const PageHome = styled.div`
 export const ImgHome = styled.div`
     margin: 2rem;
 
+    @media screen 
+    and (min-device-width: 360px) 
+    and (max-device-height: 820px) {
+        img {
+            width: 300px !important;
+        }
+    }
+
     img {
         border-bottom: 1px solid #e72727;
         /* box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.1); */
